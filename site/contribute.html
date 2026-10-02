@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400..600&family=Inter:wght@400..700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<title>Contribute &middot; NEU/NYP Archive</title>
+</head>
+<body>
+<div class="demobar"><div class="wrap">
+  <b>Demonstration prototype</b>
+  <span>Every record shown is invented sample data &middot; not an official CAL FIRE site &middot; no real records are published here</span>
+</div></div>
+
+<section style="padding:34px 0 0">
+  <div class="wrap">
+    <p class="crumb"><a href="index.html">Home</a> &rsaquo; Contribute</p>
+    <h1 style="max-width:22ch">The archive room is not the whole story</h1>
+    <p style="font-size:1.12rem;color:var(--ink-2);max-width:66ch">
+      Some of the best photographs of this Unit are in retirees&rsquo; garages, not on its shelves. And a
+      great many of the faces already in the collection are unidentified. Both of those are fixable, and
+      neither is fixable by one person scanning boxes.
+    </p>
+  </div>
+</section>
+
+<section style="padding:36px 0 0">
+  <div class="wrap">
+    <div class="sechead"><h2>Identify this photograph</h2>
+      <span class="more tag">Moderated &middot; every contributor credited</span></div>
+    <p style="max-width:62ch;color:var(--ink-2);margin-top:-14px">
+      Nothing submitted here appears on a record automatically. Suggestions go into a queue, get
+      corroborated where possible, and are marked as attributed rather than confirmed when they cannot be.
+    </p>
+    <div class="grid" id="unknown"></div>
+  </div>
+</section>
+
+<section class="alt" style="margin-top:46px">
+  <div class="wrap">
+    <div class="cols flip">
+      <div>
+        <h2>Add something to the collection</h2>
+        <p style="color:var(--ink-2);max-width:60ch">
+          If you have photographs, slides, film, or paperwork from this Unit, it can be scanned and
+          returned to you. The original stays yours &mdash; it never becomes State property and it never
+          leaves your family.
+        </p>
+        <form id="contrib" onsubmit="return false">
+          <div class="field">
+            <label for="n">Your name</label>
+            <input type="text" id="n" autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="e">Email or phone</label>
+            <input type="text" id="e" autocomplete="email">
+            <p class="help">Only used to arrange pickup and to credit you. Not published.</p>
+          </div>
+          <div class="field">
+            <label for="rel">Your connection to the Unit</label>
+            <select id="rel">
+              <option>Retired member</option><option>Current member</option>
+              <option>Family of a member</option><option>Local historian or researcher</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="d">What do you have?</label>
+            <textarea id="d" placeholder="Roughly what it is, roughly when it is from, and anything you know about it."></textarea>
+          </div>
+          <div class="field">
+            <label>Attach something, if it is already digital</label>
+            <div class="dropzone">Drag files here, or browse<br>
+              <span style="font-size:12.5px;color:var(--faint)">Demo only &mdash; this form does not submit anywhere</span></div>
+          </div>
+          <div class="btnrow">
+            <button class="btn primary" type="button" onclick="document.getElementById('sent').style.display='block'">Send</button>
+            <a class="btn" href="#release">Read the release first</a>
+          </div>
+          <div class="note" id="sent" style="display:none">
+            <h4>Demo form</h4>
+            <p style="margin-bottom:0">Nothing was submitted and nothing was stored. On the live site this
+            would reach a project inbox, and you would get a plain-language release to sign before anything
+            was scanned.</p>
+          </div>
+        </form>
+      </div>
+
+      <aside class="facets" style="order:2">
+        <div class="fgroup" id="release">
+          <h3>The release, in plain language</h3>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--muted)">
+            You keep your original. You keep your copyright. You give permission to publish a scan, and you
+            can withdraw that permission later. You tell us how you want to be credited, or whether you
+            would rather not be. If you change your mind, the item comes down.
+          </p>
+        </div>
+        <div class="fgroup" id="takedown">
+          <h3>Asking for something to come down</h3>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--muted)">
+            Anyone &mdash; family, retiree, current employee, member of the public &mdash; can ask that an
+            item be removed. It comes down first and gets discussed after. No form required and no reason
+            needs to be given.
+          </p>
+          <a class="btn" href="#" onclick="return false">Request a removal</a>
+        </div>
+        <div class="fgroup">
+          <h3>Oral histories</h3>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--muted)">
+            Recording retirees is the one part of this that gets harder every year and cannot be caught up
+            on later. If you would sit for an hour with a recorder, that is worth more than most of what is
+            in the boxes.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  el("#unknown").innerHTML = ["NYP-016","NYP-005","NYP-019","NYP-028"].map(id => {
+    const it = item(id);
+    return `<a class="card" href="item.html?id=${it.id}">
+      <div class="plate">${plate(it)}<span class="badge">Unidentified</span></div>
+      <div class="body"><p class="ttl">${esc(it.t)}</p>
+      <p class="meta">${it.year} &middot; ${esc(it.fmt)}</p></div></a>`;
+  }).join("");
+})();
+</script>
+</body>
+</html>

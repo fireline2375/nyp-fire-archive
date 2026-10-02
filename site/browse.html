@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400..600&family=Inter:wght@400..700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<title>Browse the archive &middot; NEU/NYP Archive</title>
+</head>
+<body>
+<div class="demobar"><div class="wrap">
+  <b>Demonstration prototype</b>
+  <span>Every record shown is invented sample data &middot; not an official CAL FIRE site &middot; no real records are published here</span>
+</div></div>
+
+<section style="padding:30px 0 0">
+  <div class="wrap">
+    <p class="crumb"><a href="index.html">Home</a> &rsaquo; Browse</p>
+    <form class="searchbox" id="bs" role="search" style="max-width:560px;margin-bottom:26px">
+      <input type="search" id="q" placeholder="Search the catalog&hellip;" aria-label="Search the archive">
+      <button type="submit">Search</button>
+    </form>
+  </div>
+</section>
+
+<section style="padding:10px 0 60px">
+  <div class="wrap">
+    <div class="cols">
+      <aside class="facets" id="facets"></aside>
+      <div>
+        <div class="chips" id="chips"></div>
+        <div class="toolbar">
+          <span id="count"></span>
+          <span class="seg">
+            <button type="button" data-view="list" class="on">List</button>
+            <button type="button" data-view="grid">Grid</button>
+          </span>
+        </div>
+        <div id="results"></div>
+        <p style="font-family:var(--sans);font-size:12.5px;color:var(--faint);margin-top:20px;line-height:1.6">
+          Withheld items are deliberately absent from these results. They exist in the Unit&rsquo;s private
+          catalog and in the <a href="review.html">review queue</a>, but the public index does not list them
+          or acknowledge them.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const state = {
+    q: qs("q"),
+    type: new Set(qs("type") ? [qs("type")] : []),
+    series: new Set(),
+    inc: new Set(qs("inc") ? [qs("inc")] : []),
+    stn: new Set(),
+    decade: new Set(),
+    risk: qs("risk") === "1",
+    view: "list"
+  };
+  el("#q").value = state.q;
+
+  const pool = publicItems();
+  const decade = y => Math.floor(y/10)*10;
+
+  function pass(it, skip){
+    if(!matches(it, state.q)) return false;
+    if(skip !== "type"   && state.type.size   && !state.type.has(it.type)) return false;
+    if(skip !== "series" && state.series.size && !state.series.has(it.series)) return false;
+    if(skip !== "inc"    && state.inc.size    && !state.inc.has(it.inc)) return false;
+    if(skip !== "stn"    && state.stn.size    && !state.stn.has(it.stn)) return false;
+    if(skip !== "decade" && state.decade.size && !state.decade.has(String(decade(it.year)))) return false;
+    if(state.risk && !(it.risk === "high" || it.risk === "critical")) return false;
+    return true;
+  }
+  const results = () => pool.filter(it => pass(it));
+
+  function group(key, label, opts, keyfn){
+    const counts = {};
+    pool.filter(it => pass(it, key)).forEach(it => {
+      const v = keyfn(it); if(v != null) counts[v] = (counts[v]||0)+1;
+    });
+    const rows = opts.filter(o => counts[o.v]).map(o => `
+      <label><input type="checkbox" data-k="${key}" value="${esc(o.v)}"
+        ${state[key].has(String(o.v)) ? "checked" : ""}>
+        <span>${esc(o.l)}</span><span class="ct">${counts[o.v]}</span></label>`).join("");
+    return rows ? `<div class="fgroup"><h3>${label}</h3>${rows}</div>` : "";
+  }
+
+  function draw(){
+    const decades = [...new Set(pool.map(i => decade(i.year)))].sort();
+    el("#facets").innerHTML =
+      `<div class="fgroup"><h3>Condition</h3>
+         <label><input type="checkbox" id="riskbox" ${state.risk?"checked":""}>
+         <span>Flagged at risk</span>
+         <span class="ct">${pool.filter(i=>i.risk==="high"||i.risk==="critical").length}</span></label></div>` +
+      group("type","Format", Object.keys(TYPE_LABEL).map(v=>({v,l:TYPE_LABEL[v]})), i=>i.type) +
+      group("series","Series", [...new Set(pool.map(i=>i.series))].sort().map(v=>({v,l:v})), i=>i.series) +
+      group("inc","Incident", INCIDENTS.map(i=>({v:i.id,l:i.name+" ("+i.year+")"})), i=>i.inc) +
+      group("stn","Station", STATIONS.map(s=>({v:s.id,l:stationLabel(s)})), i=>i.stn) +
+      group("decade","Decade", decades.map(d=>({v:String(d),l:d+"s"})), i=>String(decade(i.year)));
+
+    els("#facets input[data-k]").forEach(b => b.addEventListener("change", e => {
+      const k = e.target.dataset.k, v = e.target.value;
+      e.target.checked ? state[k].add(v) : state[k].delete(v);
+      draw();
+    }));
+    const rb = el("#riskbox");
+    if(rb) rb.addEventListener("change", e => { state.risk = e.target.checked; draw(); });
+
+    const chips = [];
+    if(state.q) chips.push(["q", "“" + state.q + "”"]);
+    if(state.risk) chips.push(["risk","At risk"]);
+    ["type","series","inc","stn","decade"].forEach(k => state[k].forEach(v => {
+      const l = k === "inc" ? incident(v).name : k === "stn" ? stationLabel(station(v))
+              : k === "type" ? TYPE_LABEL[v] : k === "decade" ? v + "s" : v;
+      chips.push([k + ":" + v, l]);
+    }));
+    el("#chips").innerHTML = chips.length
+      ? chips.map(([id,l]) => `<button class="chip" data-clear="${esc(id)}">${esc(l)} &times;</button>`).join("") +
+        `<button class="chip" data-clear="*" style="background:#fff">Clear all</button>`
+      : "";
+    els("#chips .chip").forEach(c => c.addEventListener("click", () => {
+      const v = c.dataset.clear;
+      if(v === "*"){ state.q=""; el("#q").value=""; state.risk=false;
+        ["type","series","inc","stn","decade"].forEach(k=>state[k].clear()); }
+      else if(v === "q"){ state.q=""; el("#q").value=""; }
+      else if(v === "risk"){ state.risk=false; }
+      else { const [k,val]=v.split(":"); state[k].delete(val); }
+      draw();
+    }));
+
+    const r = results();
+    el("#count").textContent = r.length + (r.length === 1 ? " record" : " records")
+      + (state.q ? " matching “" + state.q + "”" : "");
+    el("#results").innerHTML = r.length
+      ? (state.view === "grid"
+          ? `<div class="grid">${r.map(card).join("")}</div>`
+          : `<div class="rows">${r.map(it => row(it, state.q)).join("")}</div>`)
+      : `<div class="rows"><p class="empty">Nothing matches that yet.<br>
+         <span style="font-size:13px">This prototype holds ${pool.length} public sample records.</span></p></div>`;
+  }
+
+  els(".seg button").forEach(b => b.addEventListener("click", () => {
+    els(".seg button").forEach(x => x.classList.toggle("on", x === b));
+    state.view = b.dataset.view; draw();
+  }));
+  el("#bs").addEventListener("submit", e => {
+    e.preventDefault(); state.q = el("#q").value.trim(); draw();
+  });
+  draw();
+})();
+</script>
+</body>
+</html>

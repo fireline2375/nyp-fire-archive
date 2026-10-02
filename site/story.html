@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400..600&family=Inter:wght@400..700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<title>Iron Mike &middot; NEU/NYP Archive</title>
+</head>
+<body>
+<div class="demobar"><div class="wrap">
+  <b>Demonstration prototype</b>
+  <span>Every record shown is invented sample data &middot; not an official CAL FIRE site &middot; no real records are published here</span>
+</div></div>
+
+<div class="story-hero">
+  <div class="wrap narrow" style="margin-left:auto;margin-right:auto">
+    <p class="eyebrow">From the archive</p>
+    <h1>Iron Mike</h1>
+    <p class="lede">One object, sixty years of paperwork, and the people who worked around it.</p>
+  </div>
+</div>
+
+<section style="padding:46px 0 20px">
+  <div class="wrap narrow" style="margin-left:auto;margin-right:auto">
+    <div class="note quiet" style="margin-top:0">
+      <h4>Placeholder text</h4>
+      <p style="margin-bottom:0">The Iron Mike story already exists and is the reason this project got
+      started. The text below is <b>sample copy standing in for it</b> &mdash; it shows how a feature reads
+      on top of the catalog, with records cited inline, without putting words in anyone&rsquo;s mouth.
+      The real story would be dropped in here as-is.</p>
+    </div>
+
+    <div class="prose">
+      <p>Every unit has one. The thing that was always there, that nobody can quite date, that three
+      different people will tell you three different stories about. Ask around long enough and you will
+      get a name, a decade, and a shrug.</p>
+
+      <p>What an archive is good for is settling that. Not with a better memory, but with paper: a
+      requisition, a photograph with a date on the verso, a line in a station log. Put enough of those
+      next to each other and the shrug turns into a timeline.</p>
+
+      <h2>What the paperwork says</h2>
+      <p>The earliest reference in the collection is a single index card &mdash; chassis specifications,
+      pump ratings, an assignment history running about fifteen years in three different hands. It is not
+      a story. It is the skeleton a story hangs on.</p>
+
+      <figure>
+        <div class="plate" id="fig1"></div>
+        <figcaption>Sample record: apparatus record card, 1967. Placeholder image &mdash; not an actual scan.
+          <a href="item.html?id=NYP-015">View the catalog record</a></figcaption>
+      </figure>
+
+      <p>The photographs are harder. There are plenty of them, and almost none are captioned. A print from
+      the late fifties shows a line of men in front of a station that has since been rebuilt twice; the
+      faces are sharp and the names are gone.</p>
+
+      <blockquote>
+        You can preserve an object and still lose everything that made it matter. The object is the easy part.
+        <cite>&mdash; sample pull quote, standing in for the real interview</cite>
+      </blockquote>
+
+      <h2>Where the record runs out</h2>
+      <p>This is the point in every one of these stories where the documents stop and the people start.
+        Somebody&rsquo;s father took the photograph. Somebody&rsquo;s uncle is third from the left. That
+        information is not in the archive room and never was &mdash; it is in garages, photo albums, and
+        the heads of people who retired twenty years ago.</p>
+
+      <p>Which is the argument for putting any of this online in the first place. A closed archive can only
+        ever answer questions. An open one collects them.</p>
+
+      <div class="note">
+        <h4>Can you help?</h4>
+        <p>There are faces, apparatus, and locations in this collection that nobody has been able to name.
+          If you worked here, or your family did, you probably know something no finding aid will ever
+          capture.</p>
+        <p style="margin-bottom:0"><a class="btn ember" style="display:inline-block" href="contribute.html">Help identify a photograph</a></p>
+      </div>
+
+      <h2>Records cited in this story</h2>
+    </div>
+    <div class="grid" id="cited" style="margin-bottom:40px"></div>
+  </div>
+</section>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  el("#fig1").innerHTML = plate(item("NYP-015"), 760, 500);
+  el("#cited").innerHTML = ["NYP-015","NYP-016","NYP-019","NYP-017"].map(id => card(item(id))).join("");
+})();
+</script>
+</body>
+</html>

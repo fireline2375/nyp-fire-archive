@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400..600&family=Inter:wght@400..700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<title>Review queue &middot; NEU/NYP Archive</title>
+</head>
+<body>
+<div class="demobar"><div class="wrap">
+  <b>Demonstration prototype</b>
+  <span>Every record shown is invented sample data &middot; not an official CAL FIRE site &middot; no real records are published here</span>
+</div></div>
+
+<section style="padding:34px 0 0">
+  <div class="wrap narrow" style="margin-left:0">
+    <p class="crumb"><a href="index.html">Home</a> &rsaquo; Review queue</p>
+    <p class="eyebrow">For the Unit &middot; not publicly reachable on the live site</p>
+    <h1>The approval gate</h1>
+    <p style="font-size:1.1rem;color:var(--ink-2)">
+      This is the only place anything becomes public. Scans arrive here as <em>unreviewed</em>, visible to
+      nobody outside the Unit&rsquo;s own accounts. A reviewer approves, withholds, or approves with redaction.
+      A few clicks per item, at whatever pace suits the day &mdash; nothing expires waiting.
+    </p>
+    <div class="note quiet">
+      <h4>Working demo</h4>
+      <p style="margin-bottom:0">The buttons below really do work &mdash; they move items in and out of the
+      public catalog for this browser session. Reload to reset. On the live site this is behind a login and
+      every action is written to an audit trail against a named account.</p>
+    </div>
+  </div>
+</section>
+
+<section style="padding:26px 0 60px">
+  <div class="wrap">
+    <div class="cols flip">
+      <div>
+        <div class="toolbar" style="margin-bottom:14px">
+          <span id="qcount"></span>
+        </div>
+        <div class="queue" id="queue"></div>
+      </div>
+      <aside class="facets" style="order:2">
+        <div class="fgroup">
+          <h3>Audit trail</h3>
+          <div id="log" style="font-family:var(--sans);font-size:12.5px;color:var(--muted);line-height:1.6"></div>
+        </div>
+        <div class="fgroup">
+          <h3>Public catalog</h3>
+          <p style="font-family:var(--sans);font-size:13px;color:var(--muted);margin:0 0 10px;line-height:1.6">
+            <span id="pubn" style="font-weight:650;color:var(--ink)"></span> records are currently served to
+            the public. <span id="holdn" style="font-weight:650;color:var(--hold)"></span> are withheld and do
+            not appear in the public index at all.
+          </p>
+          <a class="btn" href="browse.html">Open the public view</a>
+        </div>
+        <div class="fgroup">
+          <h3>Enforced by the database</h3>
+          <p style="font-family:var(--sans);font-size:12.5px;color:var(--muted);margin:0;line-height:1.6">
+            Row Level Security decides what an anonymous visitor may read. Default is deny. A bug in the
+            website cannot leak an unapproved record, because the public role has no permission to see it.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const REVIEWER = "B. Chief (demo account)";
+  const log = [];
+  const pending = () => ITEMS.filter(i => i.status === "unreviewed" || i._touched);
+
+  function stamp(){
+    const d = new Date();
+    return d.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit", second:"2-digit"});
+  }
+  function act(id, status, note){
+    const it = item(id);
+    it.status = status; it._touched = true;
+    log.unshift(`<p style="margin:0 0 9px"><b style="color:var(--ink)">${STATUS_LABEL[status]}</b>
+      &middot; ${esc(it.id)}<br><span style="color:var(--faint)">${stamp()} &middot; ${esc(REVIEWER)}
+      ${note ? "&middot; " + esc(note) : ""}</span></p>`);
+    draw();
+  }
+
+  function draw(){
+    const q = pending();
+    el("#qcount").textContent = q.filter(i => i.status === "unreviewed").length
+      + " awaiting a decision, " + q.length + " in this session";
+    el("#queue").innerHTML = q.map(it => {
+      const inc = it.inc ? incident(it.inc) : null;
+      const done = it.status !== "unreviewed";
+      const flags = (it.flags || []).map(f =>
+        `<div class="flagnote"><b>Flagged:</b> <span>${esc(FLAG_LABEL[f])}.
+          ${f === "phi" ? "Default is withhold in full."
+          : f === "personnel" ? "Default is withhold; redaction only where the record is otherwise historical."
+          : f === "investigation" ? "Closed-case status does not by itself make this publishable."
+          : "A redacted copy is usually the right answer here."}</span></div>`).join("");
+      return `<div class="qitem${done ? " done" : ""}">
+        <span class="thumb">${plate(it, 192, 144)}</span>
+        <div>
+          <h3>${esc(it.t)}</h3>
+          <p class="meta">${esc(it.id)} &middot; ${TYPE_LABEL[it.type]} &middot; ${it.year}
+            ${inc ? "&middot; " + esc(inc.name) : ""} &middot; ${esc(it.box)}</p>
+          <p style="margin:0;font-size:14.5px;color:var(--ink-2);line-height:1.55">${esc(it.d)}</p>
+          ${flags}
+          ${done ? `<p style="margin:11px 0 0">${pill(it.status)}
+            <button class="btn" style="display:inline-block;margin-left:8px;padding:4px 10px;font-size:12.5px"
+              data-undo="${it.id}">Undo</button></p>` : ""}
+        </div>
+        <div class="qactions">
+          ${done ? "" : `
+          <button class="btn primary" data-a="approved" data-id="${it.id}">Approve</button>
+          <button class="btn" data-a="redacted" data-id="${it.id}">Approve redacted</button>
+          <button class="btn ghost-hold" data-a="withheld" data-id="${it.id}">Withhold</button>`}
+        </div>
+      </div>`;
+    }).join("") || `<p class="empty">Queue is clear. Nothing is waiting on the Unit.</p>`;
+
+    els("#queue [data-a]").forEach(b => b.addEventListener("click", () =>
+      act(b.dataset.id, b.dataset.a,
+          b.dataset.a === "redacted" ? "masked identifying detail" : "")));
+    els("#queue [data-undo]").forEach(b => b.addEventListener("click", () => {
+      const it = item(b.dataset.undo);
+      it.status = "unreviewed"; delete it._touched;
+      log.unshift(`<p style="margin:0 0 9px"><b style="color:var(--ink)">Returned to queue</b>
+        &middot; ${esc(it.id)}<br><span style="color:var(--faint)">${stamp()} &middot; ${esc(REVIEWER)}</span></p>`);
+      draw();
+    }));
+
+    el("#log").innerHTML = log.length ? log.join("")
+      : `<p style="margin:0;color:var(--faint)">No decisions yet this session.</p>`;
+    el("#pubn").textContent = publicItems().length;
+    el("#holdn").textContent = ITEMS.filter(i => i.status === "withheld").length;
+  }
+  draw();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+# Demonstration prototype with sample data only. Please do not index.
+User-agent: *
+Disallow: /

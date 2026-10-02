@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Who worked here &middot; NEU/NYP Archive</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400..600&family=Inter:wght@400..700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .treewrap{position:relative;background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
+    overflow:hidden;box-shadow:var(--shadow)}
+  #tree{display:block;width:100%;height:clamp(520px,72vh,860px);cursor:grab;touch-action:none}
+  #tree.grabbing{cursor:grabbing}
+  .link{fill:none;stroke:#cfc7ba;stroke-width:1.4px}
+  .link.lineage{stroke:var(--ember);stroke-width:2.2px}
+  .link.dim{stroke:#e7e1d7}
+  .alsolink{fill:none;stroke:var(--brass);stroke-width:1.6px;stroke-dasharray:5 4;opacity:.9}
+  .node{cursor:pointer}
+  .node circle{stroke:#fff;stroke-width:1.6px;transition:opacity .35s}
+  .node text{font-family:var(--sans);font-size:11.5px;fill:var(--ink-2);paint-order:stroke;
+    stroke:#fff;stroke-width:3.4px;stroke-linejoin:round;transition:opacity .35s}
+  .node.structural text{font-weight:650;font-size:12.5px;fill:var(--ink)}
+  .node.unit text{font-size:15px}
+  .node.era text{font-weight:500;fill:var(--muted);font-size:11px}
+  .node.hit text{fill:var(--ember);font-weight:650}
+  .node.inactive circle{opacity:.17}
+  .node.inactive text{opacity:.3}
+  .node.sel circle{stroke:var(--ink);stroke-width:2.6px}
+  .count{font-family:var(--sans);font-size:9.5px;font-weight:650;fill:#fff;stroke:none;pointer-events:none}
+  .overlay{position:absolute;left:0;right:0;bottom:0;padding:12px 16px;display:flex;gap:14px;align-items:center;
+    background:linear-gradient(to top,rgba(255,255,255,.97),rgba(255,255,255,.82),rgba(255,255,255,0));
+    font-family:var(--sans);font-size:13px;flex-wrap:wrap}
+  .yearbig{font-family:var(--sans);font-weight:650;font-size:26px;letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums;color:var(--ink);min-width:3.6ch}
+  input[type=range]{flex:1;min-width:180px;accent-color:var(--ember)}
+  .legend{display:flex;gap:13px;flex-wrap:wrap;font-family:var(--sans);font-size:12px;color:var(--muted);
+    margin-top:12px;align-items:center}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+  .pbar{position:absolute;top:12px;right:14px;display:flex;gap:7px}
+  .toolsrow{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .toolsrow input[type=search]{font-family:var(--sans);font-size:14px;padding:8px 11px;border:1px solid var(--rule-2);
+    border-radius:5px;min-width:210px;background:#fff}
+  .toolsrow input[type=search]:focus{outline:2px solid var(--ember);outline-offset:-2px}
+  .pcard{font-family:var(--sans)}
+  .pcard .nm{font-family:var(--serif);font-size:1.3rem;font-weight:600;margin:0 0 2px;letter-spacing:-.01em}
+  .pcard .rk{font-size:12.5px;color:var(--ember);font-weight:600;letter-spacing:.03em;text-transform:uppercase;margin:0 0 14px}
+  .barwrap{height:7px;background:var(--band);border-radius:4px;overflow:hidden;margin:7px 0 4px;border:1px solid var(--rule)}
+  .barwrap span{display:block;height:100%;background:var(--ember);opacity:.8}
+  @media (max-width:900px){ #tree{height:clamp(420px,66vh,640px)} }
+</style>
+</head>
+<body>
+<div class="demobar"><div class="wrap">
+  <b>Demonstration prototype</b>
+  <span>Every record shown is invented sample data &middot; not an official CAL FIRE site &middot; no real records are published here</span>
+</div></div>
+
+<section style="padding:30px 0 0">
+  <div class="wrap">
+    <p class="crumb"><a href="index.html">Home</a> &rsaquo; Who worked here</p>
+    <p class="eyebrow">Unit &rarr; battalion &rarr; station &rarr; era &rarr; person</p>
+    <h1 style="max-width:26ch">Who worked here</h1>
+    <p style="font-size:1.1rem;color:var(--ink-2);max-width:68ch">
+      A roster is a list. This is the same information as a shape: every battalion, every station, every era,
+      and the people who stood a watch there. Drag the year and the Unit fills and empties around you.
+    </p>
+
+    <div class="note" style="border-left-color:var(--brass)">
+      <h4 style="color:var(--brass)">Real structure, invented people</h4>
+      <p><b>The battalions and stations are real.</b> Battalions 11, 12, 13, 15, 16 and 17, and the stations
+      under them, are taken from the CAL FIRE Nevada-Yuba-Placer Unit 2026 Strategic Fire Plan &mdash; the
+      unit staffing roster in that document. B-14 (Smartsville&ndash;Columbia Hill) appears there as a
+      planning area rather than a staffed battalion, so it is not a branch here.</p>
+      <p style="margin-bottom:0"><b>The people are not.</b> Every name, rank, and date is machine-generated
+      from a word list to give the graph something to draw. No real roster, personnel file, or service record
+      was used, and nothing here corresponds to any actual person. On a live archive this view would be built
+      only from information already in the public record &mdash; and it would go through the Unit&rsquo;s
+      review gate first, like everything else.</p>
+    </div>
+  </div>
+</section>
+
+<section style="padding:22px 0 60px">
+  <div class="wrap">
+    <div class="toolsrow">
+      <input type="search" id="find" placeholder="Find a name, rank, or station&hellip;" aria-label="Search the tree">
+      <button class="btn" id="expand">Expand all</button>
+      <button class="btn" id="collapse">Collapse</button>
+      <button class="btn" id="fit">Re-centre</button>
+      <span id="stat" style="font-family:var(--sans);font-size:13px;color:var(--muted);margin-left:auto"></span>
+    </div>
+
+    <div class="cols flip">
+      <div>
+        <div class="treewrap">
+          <svg id="tree" role="img" aria-label="Animated personnel tree of the Unit, its battalions and stations"></svg>
+          <div class="pbar">
+            <button class="btn primary" id="play">&#9654;&nbsp; Play the years</button>
+          </div>
+          <div class="overlay">
+            <span class="yearbig" id="yearlbl">2026</span>
+            <input type="range" id="year" min="1931" max="2026" value="2026" step="1" aria-label="Year">
+            <span id="activelbl" style="color:var(--muted);font-variant-numeric:tabular-nums"></span>
+          </div>
+        </div>
+        <div class="legend">
+          <span><i style="background:#1b1a18"></i>Unit</span>
+          <span><i style="background:#3b4b38"></i>Battalion</span>
+          <span><i style="background:#8a6a2c"></i>Station</span>
+          <span><i style="background:#b9b2a6"></i>Era</span>
+          <span style="margin-left:6px;padding-left:14px;border-left:1px solid var(--rule)">
+            <i style="background:#a8331a"></i>Chief officer</span>
+          <span><i style="background:#c2714a"></i>Captain</span>
+          <span><i style="background:#6d8793"></i>Engineer / specialist</span>
+          <span><i style="background:#9aa3ab"></i>Firefighter</span>
+        </div>
+        <p style="font-family:var(--sans);font-size:12.5px;color:var(--faint);margin-top:12px;line-height:1.6">
+          Click any station or era to open and close it. Drag to pan, scroll to zoom, hover a person to trace
+          their line back to the Unit. Gold dashes mark a second station the same person served at &mdash;
+          the thing a flat roster can never show you.
+        </p>
+      </div>
+
+      <aside class="facets" id="side"></aside>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/people.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const KIND = { unit:"#1b1a18", hq:"#2f3a40", battalion:"#3b4b38", station:"#8a6a2c", era:"#b9b2a6" };
+  const RANKC = lvl => lvl >= 5 ? "#a8331a" : lvl === 4 ? "#a8331a"
+                     : lvl === 3 ? "#c2714a" : lvl === 2 ? "#6d8793" : "#9aa3ab";
+  const RADIUS = { unit:9, hq:7, battalion:7, station:6.5, era:4, person:4.5 };
+
+  const svg = d3.select("#tree");
+  const gRoot = svg.append("g");
+  const gLink = gRoot.append("g").attr("class","links");
+  const gAlso = gRoot.append("g").attr("class","alsos");
+  const gNode = gRoot.append("g").attr("class","nodes");
+
+  const tree = d3.tree().nodeSize([21, 186]).separation((a,b) =>
+    (a.parent === b.parent ? 1 : 1.45) * (a.data.kind === "person" ? 1 : 1.3));
+  const diagonal = d3.linkHorizontal().x(d => d.y).y(d => d.x);
+
+  const root = d3.hierarchy(buildTree());
+  root.x0 = 0; root.y0 = 0;
+  root.descendants().forEach((d,i) => {
+    d._id = i;
+    if(d.depth >= 2 && d.children){ d._children = d.children; d.children = null; }
+  });
+
+  let year = YEAR_MAX, term = "", selected = null, first = true, playing = null;
+
+  const zoom = d3.zoom().scaleExtent([0.35, 2.4])
+    .on("start", () => svg.classed("grabbing", true))
+    .on("end",   () => svg.classed("grabbing", false))
+    .on("zoom",  e => gRoot.attr("transform", e.transform));
+  svg.call(zoom);
+
+  /* fit the laid-out tree to the frame, leaving room for labels on both sides */
+  const PAD_L = 214, PAD_R = 198, PAD_V = 30;
+  function recentre(dur, opts){
+    const b = svg.node().getBoundingClientRect();
+    const ns = root.descendants();
+    if(!ns.length || !b.width) return;
+    const xs = ns.map(d => d.x), ys = ns.map(d => d.y);
+    const x0 = Math.min(...xs), x1 = Math.max(...xs);
+    const y0 = Math.min(...ys), y1 = Math.max(...ys);
+    const o = opts || {};
+    // label room scales with the frame, so a narrow window does not crush the zoom
+    const padL = Math.min(PAD_L, b.width * 0.27), padR = Math.min(PAD_R, b.width * 0.22);
+    const spanW = Math.max(1, y1 - y0), spanH = Math.max(1, x1 - x0);
+    const fitW = (b.width - padL - padR) / spanW;
+    const fitH = (b.height - PAD_V * 2) / spanH;
+    // when the tree is too tall to fit, keep the labels readable and let the user pan
+    const k = Math.max(o.minK || 0.3, Math.min(1.45, o.top ? fitW : Math.min(fitW, fitH)));
+    const contentW = padL + k * spanW + padR;
+    const tx = (b.width - contentW) / 2 + padL - k * y0;
+    const ty = o.top ? (PAD_V - k * x0) : (b.height / 2 - k * ((x0 + x1) / 2));
+    const t = d3.zoomIdentity.translate(tx, ty).scale(k);
+    if(!dur) svg.call(zoom.transform, t);
+    else svg.transition("fit").duration(dur).call(zoom.transform, t);
+  }
+
+
+  /* d3's each() only walks visible children, so searching needs its own walk */
+  function walkAll(d, fn){
+    fn(d);
+    const kids = (d.children || []).concat(d._children || []);
+    kids.forEach(c => walkAll(c, fn));
+  }
+
+  const matches = d => {
+    if(!term) return false;
+    const t = term.toLowerCase();
+    const p = d.data.p;
+    return (d.data.name || "").toLowerCase().includes(t) ||
+           (p && (p.rank.toLowerCase().includes(t) ||
+                  String(p.from).includes(t) || String(p.to).includes(t)));
+  };
+
+  function update(source){
+    const nodes = root.descendants();
+    tree(root);
+    const links = root.links();
+
+    /* ---- links ---- */
+    const link = gLink.selectAll("path").data(links, d => d.target._id);
+    const linkEnter = link.enter().append("path")
+      .attr("class","link")
+      .attr("d", () => { const o = {x:source.x0, y:source.y0}; return diagonal({source:o, target:o}); })
+      .attr("opacity", 0);
+    link.merge(linkEnter).transition().duration(first ? 520 : 420)
+      .delay(d => first ? d.target.depth * 110 : 0)
+      .attr("opacity", 1)
+      .attr("d", diagonal);
+    link.exit().transition().duration(300)
+      .attr("d", () => { const o = {x:source.x, y:source.y}; return diagonal({source:o, target:o}); })
+      .attr("opacity", 0).remove();
+
+    /* ---- nodes ---- */
+    const node = gNode.selectAll("g.node").data(nodes, d => d._id);
+    const enter = node.enter().append("g")
+      .attr("transform", () => `translate(${source.y0},${source.x0})`)
+      .attr("opacity", 0)
+      .on("click", (e,d) => {
+        if(d.data.kind === "person"){ select(d); return; }
+        if(d.children){ d._children = d.children; d.children = null; }
+        else { d.children = d._children; d._children = null; }
+        update(d);
+      })
+      .on("mouseenter", (e,d) => lineage(d))
+      .on("mouseleave", () => lineage(null));
+
+    enter.append("circle");
+    enter.append("text").attr("dy","0.33em");
+
+    const all = enter.merge(node);
+    all.attr("class", d => "node " + d.data.kind
+        + (d.data.kind === "person" ? "" : " structural")
+        + (matches(d) ? " hit" : "")
+        + (selected && selected._id === d._id ? " sel" : "")
+        + (d.data.kind === "person" && !activeIn(d.data.p, year) ? " inactive" : ""));
+
+    all.select("circle")
+      .attr("fill", d => d.data.kind === "person" ? RANKC(d.data.p.lvl) : KIND[d.data.kind])
+      .transition().duration(420)
+      .attr("r", d => {
+        if(d.data.kind === "station"){
+          const n = d.data.st ? PEOPLE.filter(p => p.stn === d.data.st.id && activeIn(p, year)).length : 0;
+          return 5 + Math.min(n, 8) * 0.85;
+        }
+        return RADIUS[d.data.kind] * (d._children ? 1.18 : 1);
+      })
+      .attr("stroke", d => d._children ? "#6f6760" : "#fff");
+
+    all.select("text")
+      .attr("x", d => (d.children || d._children) ? -11 : 11)
+      .attr("text-anchor", d => (d.children || d._children) ? "end" : "start")
+      .text(d => {
+        if(d.data.kind === "person"){
+          const p = d.data.p;
+          return p.name + "  · " + p.from + "–" + (p.current ? "present" : p.to);
+        }
+        if(d.data.kind === "station" && d._children){
+          const n = PEOPLE.filter(p => p.stn === d.data.st.id).length;
+          return d.data.name + "  (" + n + ")";
+        }
+        return d.data.name;
+      });
+
+    all.transition().duration(first ? 560 : 420)
+      .delay(d => first ? d.depth * 110 : 0)
+      .attr("transform", d => `translate(${d.y},${d.x})`)
+      .attr("opacity", 1);
+
+    node.exit().transition().duration(300)
+      .attr("transform", `translate(${source.y},${source.x})`)
+      .attr("opacity", 0).remove();
+
+    nodes.forEach(d => { d.x0 = d.x; d.y0 = d.y; });
+    drawAlso();
+
+    const act = PEOPLE.filter(p => activeIn(p, year)).length;
+    d3.select("#activelbl").text(act + " on the books");
+    d3.select("#stat").text(PEOPLE.length + " sample personnel · "
+      + STATIONS.length + " stations · " + nodes.length + " nodes drawn");
+    first = false;
+  }
+
+  /* trace a person's line back to the Unit */
+  function lineage(d){
+    if(!d){ gLink.selectAll("path").classed("lineage", false).classed("dim", false); return; }
+    const chain = new Set(d.ancestors().map(a => a._id));
+    gLink.selectAll("path")
+      .classed("lineage", l => chain.has(l.target._id))
+      .classed("dim",     l => !chain.has(l.target._id));
+  }
+
+  /* gold dashes to a second station the selected person also served */
+  function drawAlso(){
+    const arcs = [];
+    if(selected && selected.data.kind === "person"){
+      const p = selected.data.p;
+      (p.also || []).forEach(sid => {
+        const target = root.descendants().find(n => n.data.kind === "station" && n.data.st && n.data.st.id === sid);
+        if(target) arcs.push({ a:selected, b:target });
+      });
+    }
+    const sel = gAlso.selectAll("path").data(arcs, d => d.a._id + "-" + d.b._id);
+    sel.enter().append("path").attr("class","alsolink")
+      .attr("opacity",0).transition().duration(450).attr("opacity",.9);
+    gAlso.selectAll("path")
+      .attr("d", d => {
+        const mx = (d.a.y + d.b.y) / 2 - 70;
+        return `M${d.a.y},${d.a.x} C${mx},${d.a.x} ${mx},${d.b.x} ${d.b.y},${d.b.x}`;
+      });
+    sel.exit().remove();
+  }
+
+  /* side panel */
+  function select(d){
+    selected = d;
+    const p = d.data.p;
+    const st = p.stn ? station(p.stn) : null;
+    const span = p.to - p.from;
+    const pct = Math.round((span / (YEAR_MAX - YEAR_MIN)) * 100);
+    const recs = publicItems().filter(i => st && i.stn === st.id).slice(0,3);
+    d3.select("#side").html(`
+      <div class="fgroup pcard">
+        <h3>Selected</h3>
+        <p class="nm">${esc(p.name)}</p>
+        <p class="rk">${esc(p.rank)}</p>
+        <table class="meta-table">
+          <tr><th>Service</th><td class="kv">${p.from}&ndash;${p.current ? "present" : p.to}
+            &nbsp;<span style="color:var(--faint)">(${span} yr${span===1?"":"s"})</span></td></tr>
+          ${st ? `<tr><th>Station</th><td>${esc(stationLabel(st))}</td></tr>
+                  <tr><th>Battalion</th><td>${esc(st.bn)}</td></tr>`
+               : `<tr><th>Assignment</th><td>Unit Office</td></tr>`}
+          ${p.also.length ? `<tr><th>Also served</th><td>${p.also.map(s =>
+              esc(stationLabel(station(s)))).join(", ")}
+              <br><span style="font-family:var(--sans);font-size:11.5px;color:var(--brass)">shown in gold on the tree</span></td></tr>` : ""}
+          <tr><th>Record id</th><td class="kv">${esc(p.id)} <span style="color:var(--faint)">(sample)</span></td></tr>
+        </table>
+        <div class="barwrap"><span style="width:${pct}%"></span></div>
+        <p style="font-family:var(--sans);font-size:11.5px;color:var(--faint);margin:0">
+          Career span against ${YEAR_MIN}&ndash;${YEAR_MAX}</p>
+      </div>
+      ${recs.length ? `<div class="fgroup">
+        <h3>Records from this station</h3>
+        ${recs.map(i => `<a href="item.html?id=${i.id}" style="display:block;font-family:var(--sans);
+          font-size:13px;padding:6px 0;text-decoration:none;color:var(--ink-2);line-height:1.45">
+          ${esc(i.t)}<br><span style="color:var(--faint);font-size:11.5px">${i.year} &middot;
+          ${TYPE_LABEL[i.type]}</span></a>`).join("")}
+      </div>` : ""}
+      <div class="fgroup">
+        <h3>Generated name</h3>
+        <p style="font-family:var(--sans);font-size:12.5px;color:var(--muted);margin:0;line-height:1.6">
+          This person does not exist. The name was assembled from a word list by the generator in
+          <code style="font-size:11.5px">people.js</code>, and the dates and rank were drawn from a
+          seeded random number generator.
+        </p>
+      </div>`);
+    update(d);
+  }
+
+  function emptySide(){
+    d3.select("#side").html(`
+      <div class="fgroup">
+        <h3>Nobody selected</h3>
+        <p style="font-family:var(--sans);font-size:13px;color:var(--muted);margin:0 0 12px;line-height:1.6">
+          Open a station, then click a person to see their service span, the other stations they worked,
+          and the records that came out of that station.
+        </p>
+        <p style="font-family:var(--sans);font-size:13px;color:var(--muted);margin:0;line-height:1.6">
+          This is the view that makes retirees pick up the phone. It is also the view that needs the most
+          care, which is why real names would come only from the public record and only after Unit review.
+        </p>
+      </div>
+      <div class="fgroup">
+        <h3>Try this</h3>
+        <p style="font-family:var(--sans);font-size:13px;color:var(--muted);margin:0;line-height:1.6">
+          Press <b>Play the years</b> and watch 1931 to today. Stations swell as crews grow, go quiet
+          between eras, and the Unit Office turns over about every twenty years.
+        </p>
+      </div>`);
+  }
+
+  /* controls */
+  d3.select("#year").on("input", function(){
+    year = +this.value;
+    d3.select("#yearlbl").text(year);
+    update(root);
+  });
+  d3.select("#play").on("click", function(){
+    const btn = d3.select(this);
+    if(playing){ clearInterval(playing); playing = null; btn.html("&#9654;&nbsp; Play the years"); return; }
+    if(year >= YEAR_MAX) year = YEAR_MIN;
+    btn.html("&#9632;&nbsp; Stop");
+    playing = setInterval(() => {
+      year += 1;
+      if(year > YEAR_MAX){ clearInterval(playing); playing = null;
+        btn.html("&#9654;&nbsp; Play the years"); return; }
+      d3.select("#year").property("value", year);
+      d3.select("#yearlbl").text(year);
+      update(root);
+    }, 110);
+  });
+  d3.select("#expand").on("click", () => {
+    root.each(d => { if(d._children){ d.children = d._children; d._children = null; } });
+    update(root); recentre(520, {top:true, minK:0.62});
+  });
+  d3.select("#collapse").on("click", () => {
+    root.each(d => { if(d.depth >= 2 && d.children){ d._children = d.children; d.children = null; } });
+    update(root); recentre(420);
+  });
+  d3.select("#fit").on("click", () => recentre(420));
+  d3.select("#find").on("input", function(){
+    term = this.value.trim();
+    let found = 0;
+    if(term){
+      const toOpen = [];
+      walkAll(root, d => { if(matches(d)){ found++; toOpen.push(d); } });
+      toOpen.forEach(d => d.ancestors().forEach(a => {
+        if(a._children){ a.children = a._children; a._children = null; }
+      }));
+    }
+    update(root);
+    recentre(450, found > 24 ? {top:true, minK:0.6} : {});
+  });
+
+  emptySide();
+  update(root);
+  // positions are final as soon as update() runs; the intro only animates toward them
+  requestAnimationFrame(() => recentre(0));
+  window.addEventListener("resize", () => recentre(250));
+})();
+</script>
+</body>
+</html>

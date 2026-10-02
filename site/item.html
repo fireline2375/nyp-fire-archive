@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400..600&family=Inter:wght@400..700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<title>Record &middot; NEU/NYP Archive</title>
+</head>
+<body>
+<div class="demobar"><div class="wrap">
+  <b>Demonstration prototype</b>
+  <span>Every record shown is invented sample data &middot; not an official CAL FIRE site &middot; no real records are published here</span>
+</div></div>
+<section style="padding:30px 0 60px"><div class="wrap" id="main"></div></section>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const it = item(qs("id"));
+  const main = el("#main");
+
+  if(!it){
+    main.innerHTML = `<p class="crumb"><a href="browse.html">&larr; Browse</a></p>
+      <h1>Record not found</h1><p>No sample record carries that identifier.</p>`;
+    return;
+  }
+  if(it.status === "withheld"){
+    main.innerHTML = `<p class="crumb"><a href="browse.html">&larr; Browse</a></p>
+      <h1>Not available</h1>
+      <div class="note"><h4>Withheld from publication</h4>
+      <p>This record exists in the Unit&rsquo;s private catalog and is not published. On the live site a
+      withheld item would not be linkable at all &mdash; it is reachable here only because this prototype
+      ships the private catalog alongside the public one so the gate can be demonstrated.</p>
+      <p style="margin-bottom:0"><a href="review.html">See how withholding works &rarr;</a></p></div>`;
+    return;
+  }
+
+  const inc = it.inc ? incident(it.inc) : null;
+  const stn = it.stn ? station(it.stn) : null;
+  document.title = it.t + " · NEU/NYP Archive";
+
+  const isMoving = it.type === "film" || it.type === "video";
+  const related = publicItems().filter(x =>
+      x.id !== it.id && ((it.inc && x.inc === it.inc) || (it.stn && x.stn === it.stn))).slice(0,4);
+
+  main.innerHTML = `
+    <p class="crumb"><a href="index.html">Home</a> &rsaquo; <a href="browse.html">Browse</a>
+      ${inc ? ` &rsaquo; <a href="browse.html?inc=${inc.id}">${esc(inc.name)}</a>` : ""}
+      &rsaquo; <span>${esc(it.id)}</span></p>
+
+    <div class="itemgrid">
+      <div>
+        <div class="viewer">
+          <div class="stage">${plate(it, 900, 675)}</div>
+          <div class="bar">
+            ${isMoving
+              ? `<button type="button">&#9654; Play</button>
+                 <button type="button">Transcript</button>
+                 <span class="sp">${esc(it.dur || "duration pending transfer")}</span>`
+              : `<button type="button">&minus;</button><button type="button">+</button>
+                 <button type="button">Fit</button><button type="button">Rotate</button>
+                 <span class="sp">${it.pages ? it.pages + " page" + (it.pages===1?"":"s") : "single image"}</span>`}
+          </div>
+        </div>
+        <p style="font-family:var(--sans);font-size:12px;color:var(--faint);margin:9px 0 26px;line-height:1.5">
+          The image above is a generated placeholder, not a scan. On the live site this is a deep-zoom
+          viewer over the archival master${isMoving ? ", or an inline player for transferred film and tape" : ""}.
+        </p>
+
+        <h1 style="font-size:1.85rem">${esc(it.t)}</h1>
+        <p style="font-size:1.06rem;color:var(--ink-2);max-width:62ch">${esc(it.d)}</p>
+
+        ${it.status === "redacted" ? `<div class="note"><h4>Redacted public copy</h4>
+          <p style="margin-bottom:0">Identifying detail has been masked in the copy shown here. The
+          unredacted master is retained privately for the Unit and is not served to the public under any
+          circumstances.</p></div>` : ""}
+
+        ${it.ocr ? `<div class="panel" style="margin-top:26px">
+          <h3>Searchable text &mdash; OCR, uncorrected</h3>
+          <div class="ocr">${esc(it.ocr)}</div>
+          <p style="font-family:var(--sans);font-size:12px;color:var(--faint);margin:10px 0 0">
+            Machine-read on ingest. Errors are left in place rather than silently corrected; the scan is
+            the authority, not this transcript.</p></div>` : ""}
+
+        ${related.length ? `<h2 style="margin-top:38px;font-size:1.25rem">Related in this collection</h2>
+          <div class="grid">${related.map(card).join("")}</div>` : ""}
+      </div>
+
+      <div>
+        <div class="panel">
+          <h3>Status</h3>
+          <p style="margin:0 0 10px">${pill(it.status)}</p>
+          <p style="font-family:var(--sans);font-size:13px;color:var(--muted);margin:0;line-height:1.55">
+            ${it.status === "approved"
+              ? "Reviewed and released by the Unit. Only approved items are served to the public."
+              : "A redacted derivative is public; the master is private."}
+          </p>
+        </div>
+
+        <div class="panel">
+          <h3>Description</h3>
+          <table class="meta-table">
+            <tr><th>Identifier</th><td class="kv">${esc(it.id)}</td></tr>
+            <tr><th>Format</th><td>${TYPE_LABEL[it.type]} &mdash; ${esc(it.fmt)}</td></tr>
+            <tr><th>Date</th><td class="kv">${it.year}</td></tr>
+            <tr><th>Series</th><td><a href="browse.html">${esc(it.series)}</a></td></tr>
+            ${inc ? `<tr><th>Incident</th><td><a href="browse.html?inc=${inc.id}">${esc(inc.name)}</a>,
+              ${inc.year} &middot; ${esc(inc.acres)} acres</td></tr>` : ""}
+            ${stn ? `<tr><th>Station</th><td>${esc(stationLabel(stn))}${stn.note ? " &mdash; " + esc(stn.note) : ""}</td></tr>` : ""}
+            ${it.bn ? `<tr><th>Battalion</th><td>${esc(it.bn)}</td></tr>` : ""}
+            <tr><th>Condition</th><td>${RISK_LABEL[it.risk]}</td></tr>
+            <tr><th>Location</th><td class="kv">${esc(it.box)}${it.folder && it.folder !== "—" ? ", " + esc(it.folder) : ""}</td></tr>
+            <tr><th>Custodian</th><td>Nevada-Yuba-Placer Unit &mdash; State record, held on deposit</td></tr>
+          </table>
+        </div>
+
+        <div class="panel">
+          <h3>Rights and use</h3>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.6;color:var(--muted);margin:0">
+            A public record of the State of California. The Unit remains custodian of record; the digital
+            copy is a copy, not a replacement. Reproduction for research and education is expected.
+            Requests for the archival master go through the Unit.
+          </p>
+        </div>
+
+        <div class="panel">
+          <h3>Something wrong here?</h3>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.6;color:var(--muted);margin:0 0 12px">
+            Misidentified, misdated, or should not be public at all? Say so and it comes down first and
+            gets discussed after.
+          </p>
+          <a class="btn" href="contribute.html#takedown">Flag this record</a>
+        </div>
+      </div>
+    </div>`;
+})();
+</script>
+</body>
+</html>

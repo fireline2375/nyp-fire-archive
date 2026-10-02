@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEU/NYP Archive &middot; prototype</title>
+<meta name="description" content="Demonstration prototype for a proposed volunteer project to digitize and catalog the Nevada-Yuba-Placer Unit archive. Sample data only.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400..600&family=Inter:wght@400..700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="demobar"><div class="wrap">
+  <b>Demonstration prototype</b>
+  <span>Every record shown is invented sample data &middot; not an official CAL FIRE site &middot; no real records are published here</span>
+</div></div>
+
+<div class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Nevada-Yuba-Placer Unit &middot; proposed volunteer archive</p>
+    <h1>The record of this Unit, out of the boxes.</h1>
+    <p class="lede">Incident packets, station logs, photographs, slides, film, and maps &mdash;
+      scanned to archival standard, cataloged item by item, and published only where the Unit approves it.</p>
+    <form class="searchbox" id="hs" role="search">
+      <input type="search" placeholder="Search incidents, stations, apparatus, years&hellip;" aria-label="Search the archive">
+      <button type="submit">Search</button>
+    </form>
+    <p class="hintrow">
+      Try
+      <a href="browse.html?q=49er">49er Fire</a>
+      <a href="browse.html?q=dozer">dozer</a>
+      <a href="browse.html?type=film">film and tape</a>
+      <a href="browse.html?q=1988">1988</a>
+    </p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="stats" id="stats"></div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="sechead">
+      <h2>On a clock</h2>
+      <a class="more" href="browse.html?risk=1">All at-risk material &rarr;</a>
+    </div>
+    <p style="max-width:64ch;color:var(--ink-2);margin-top:-14px">
+      Acetate film, color transparencies, and magnetic tape degrade on their own schedule whether anyone
+      opens the box or not. These are the items the survey flagged for transfer first.
+    </p>
+    <div class="grid" id="risk"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sechead"><h2>By incident</h2>
+      <a class="more" href="browse.html">Browse everything &rarr;</a></div>
+    <div class="rows" id="incs"></div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="sechead"><h2>From the archive</h2>
+      <a class="more" href="story.html">All stories &rarr;</a></div>
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:34px;align-items:center" id="feature">
+      <a href="story.html" style="display:block;border:1px solid var(--rule);border-radius:6px;overflow:hidden;text-decoration:none">
+        <div id="featplate" style="aspect-ratio:16/10;background:var(--band)"></div>
+      </a>
+      <div>
+        <p class="eyebrow">Feature</p>
+        <h3 style="font-size:1.7rem;line-height:1.2;margin-bottom:.5em">Iron Mike</h3>
+        <p style="color:var(--ink-2)">The piece that started this project: one object, traced through
+          sixty years of paperwork, photographs, and the memory of the people who worked around it.
+          It is the model for how the rest of this archive gets told &mdash; not as a database dump,
+          but as stories built on top of one.</p>
+        <p><a class="btn primary" style="display:inline-block" href="story.html">Read the story</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <h2>How it works</h2>
+    <ol class="prose" style="padding-left:1.1em">
+      <li><b>Nothing leaves without paperwork.</b> Material moves in small batches under a signed
+        custody receipt, two to four boxes at a time, photographed at pickup and returned on a fixed date.</li>
+      <li><b>Everything lands private.</b> Scans enter the catalog as <em>unreviewed</em> and are visible
+        only to authenticated accounts. The database itself refuses to serve them to the public.</li>
+      <li><b>The Unit holds the gate.</b> A Unit reviewer approves, withholds, or redacts each item.
+        Only approved items ever become public &mdash; and withheld items never appear in the public index at all.</li>
+    </ol>
+    <div class="note">
+      <h4>What never gets published</h4>
+      <p>No protected health information. No personnel or HR records &mdash; no evaluations, discipline,
+        medical files, home addresses, or Social Security numbers. These are structural exclusions applied
+        at ingest, not judgment calls made item by item.</p>
+      <p style="margin-bottom:0"><a href="proposal.html#privacy">Read the safeguards in full &rarr;</a>
+        &nbsp;&middot;&nbsp; <a href="review.html">See the review gate &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const pub = publicItems();
+  el("#stats").innerHTML = [
+    [ITEMS.length, "sample records"],
+    [INCIDENTS.length, "incidents"],
+    [STATIONS.length, "stations"],
+    [ITEMS.filter(i=>i.risk==="high"||i.risk==="critical").length, "flagged at risk"],
+    [ITEMS.filter(i=>i.status==="unreviewed").length, "awaiting Unit review"]
+  ].map(([n,l]) => `<div><span class="n">${n}</span><span class="l">${l}</span></div>`).join("");
+
+  el("#risk").innerHTML = ITEMS
+    .filter(i => i.risk === "critical" || i.risk === "high")
+    .slice(0,4).map(card).join("");
+
+  el("#incs").innerHTML = INCIDENTS.slice().reverse().map(inc => {
+    const n = pub.filter(i => i.inc === inc.id).length;
+    return `<a class="row" href="browse.html?inc=${inc.id}">
+      <span style="flex:1">
+        <p class="ttl">${esc(inc.name)} <span style="color:var(--faint);font-weight:400">${inc.year}</span></p>
+        <p class="meta">${esc(inc.note)} &middot; ${esc(inc.acres)} acres &middot; ${n} record${n===1?"":"s"} in this prototype</p>
+      </span>
+      <span class="tag" style="flex:none;align-self:center">View &rarr;</span></a>`;
+  }).join("");
+
+  el("#featplate").innerHTML = plate({id:"feature-ironmike", type:"photograph", t:"Iron Mike"}, 640, 400);
+  wireSearch("#hs");
+})();
+</script>
+</body>
+</html>
