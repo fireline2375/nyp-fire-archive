@@ -120,6 +120,7 @@ function chrome(){
       <div><h4>For the Unit</h4>
         <a href="signin.html">Sign in (example)</a>
         <a href="admin.html">Roles and permissions</a>
+        <a href="scanning.html">Automated flagging</a>
         <a href="review.html">Review queue demo</a>
         <a href="proposal.html#privacy">Privacy safeguards</a>
         <a href="proposal.html#custody">Chain of custody</a></div>

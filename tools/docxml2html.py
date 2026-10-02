@@ -41,6 +41,7 @@ def inline(el):
 
 # stable anchors for the sections other pages link to
 ALIAS = [("protected health", "privacy"), ("how the platform", "safeguards"),
+         ("automated flagging", "flagging"),
          ("how material would move", "custody"), ("the paperwork", "paperwork"),
          ("what gets published", "publishing"), ("name, domain", "funding"),
          ("if this is more", "tiers"), ("precedent", "precedent"),

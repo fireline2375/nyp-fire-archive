@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Automated sensitivity flagging &middot; NEU/NYP Archive</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400..600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  /* five across on a wide screen; a clean vertical pipeline when it will not fit */
+  .pipe{display:grid;grid-template-columns:repeat(5,1fr);margin:22px 0 10px;
+    border:1px solid var(--rule);border-radius:var(--radius);overflow:hidden;background:var(--card)}
+  .stage{padding:14px 15px;border-right:1px solid var(--rule);position:relative}
+  .stage:last-child{border-right:0}
+  @media (max-width:980px){
+    .pipe{grid-template-columns:1fr}
+    .stage{border-right:0;border-bottom:1px solid var(--rule);display:grid;
+      grid-template-columns:30px 1fr;column-gap:12px;align-items:baseline}
+    .stage:last-child{border-bottom:0}
+    .stage .n{margin-bottom:0}
+    .stage h4{grid-column:2}
+    .stage p{grid-column:2}
+  }
+  .stage .n{font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:.1em;
+    color:var(--faint);display:block;margin-bottom:5px}
+  .stage h4{font-family:var(--sans);font-size:13.5px;margin:0 0 4px;font-weight:700}
+  .stage p{font-size:12.5px;color:var(--muted);margin:0;line-height:1.5;font-family:var(--sans)}
+  .stage.ai{background:#fdf6e3}
+  .stage.ai h4{color:#6d4c11}
+  .stage.gate{background:var(--ember-soft)}
+  .stage.gate h4{color:var(--navy)}
+  .oneway{
+    background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--red);
+    border-radius:0 var(--radius) var(--radius) 0;padding:16px 20px;margin:0 0 30px;box-shadow:var(--shadow);
+  }
+  .oneway h4{font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.07em;
+    text-transform:uppercase;color:var(--red);margin:0 0 8px}
+  .oneway p{margin:0;font-size:15px;line-height:1.6}
+  .demo{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(250px,1fr);gap:26px;align-items:start}
+  .docpane{background:#fdfbf6;border:1px solid var(--rule-2);border-radius:var(--radius);
+    padding:24px 26px;font-family:var(--mono);font-size:12.5px;line-height:1.95;color:#2a2a2a;
+    white-space:pre-wrap;min-height:330px}
+  .docpane .hd{font-weight:700;letter-spacing:.04em}
+  mark.det{background:none;padding:1px 2px;border-radius:2px;transition:background .3s, box-shadow .3s}
+  mark.det.on{background:#ffe08a;box-shadow:0 0 0 1px #e0b63a}
+  mark.det.on.phi{background:#ffc9c9;box-shadow:0 0 0 1px #e58b8b}
+  mark.det.on.pers{background:#d8c9f0;box-shadow:0 0 0 1px #ae92db}
+  .detlist{list-style:none;padding:0;margin:0}
+  .detlist li{
+    display:none;padding:9px 0;border-bottom:1px solid var(--rule);font-family:var(--sans);font-size:13px;
+  }
+  .detlist li.on{display:block;animation:slidein .28s ease-out}
+  @keyframes slidein{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+  .detlist li:last-child{border-bottom:0}
+  .detlist .k{font-weight:700;display:block}
+  .detlist .v{color:var(--muted);font-size:12.5px}
+  .conf{float:right;font-variant-numeric:tabular-nums;color:var(--faint);font-size:12px}
+  .badge-kind{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    padding:2px 6px;border-radius:3px;margin-right:6px;vertical-align:1px}
+  .bk-phi{background:#ffc9c9;color:#8a2020}
+  .bk-pers{background:#d8c9f0;color:#4a2f7a}
+  .bk-civ{background:#ffe08a;color:#6d4c11}
+  .verdict{display:none;margin-top:18px;padding:15px 17px;border-radius:var(--radius);
+    background:#fdecec;border:1px solid #f0c6c7;font-family:var(--sans);font-size:14px;line-height:1.6}
+  .verdict.on{display:block}
+  .verdict b{color:#8a2020}
+  .limits li{margin-bottom:.55em}
+  @media (max-width:900px){ .demo{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<div class="demobar"><div class="wrap">
+  <b>Demonstration prototype</b>
+  <span>Every record shown is invented sample data &middot; not an official CAL FIRE site &middot; no real records are published here</span>
+</div></div>
+
+<section style="padding:36px 0 20px">
+  <div class="wrap">
+    <p class="crumb"><a href="index.html">Home</a> &rsaquo; Automated flagging</p>
+    <p class="eyebrow">Ingest pipeline &middot; stage three</p>
+    <h1 style="max-width:30ch">Catching sensitive material before a human has to</h1>
+    <p style="font-size:1.1rem;color:var(--ink-2);max-width:70ch">
+      Thousands of pages will pass through this project. Expecting a reviewer to spot every Social Security
+      number on a 1970s form, or every patient name buried in an incident packet, is how things get missed.
+      An automated pass reads every page on ingest and flags what looks sensitive, so the reviewer's queue
+      arrives pre-sorted and the obvious cases never reach a public URL by accident.
+    </p>
+
+    <div class="pipe">
+      <div class="stage"><span class="n">01</span><h4>Capture</h4><p>Scanned to archival TIFF. The master is never altered after this point.</p></div>
+      <div class="stage"><span class="n">02</span><h4>OCR</h4><p>Text extracted so the document is searchable &mdash; and readable by stage three.</p></div>
+      <div class="stage ai"><span class="n">03</span><h4>Automated pass</h4><p>Every page checked for PHI, personnel data and identifying detail. Flags only.</p></div>
+      <div class="stage gate"><span class="n">04</span><h4>Unit review</h4><p>A reviewer approves, withholds, or redacts. The only step that can publish.</p></div>
+      <div class="stage"><span class="n">05</span><h4>Public</h4><p>Approved items only. Masters and unredacted originals stay private.</p></div>
+    </div>
+    <p style="font-family:var(--sans);font-size:12.5px;color:var(--faint);margin:0 0 30px">
+      Stage three runs on every page. It has no connection to stage five.
+    </p>
+
+    <div class="oneway">
+      <h4>The rule that makes this safe</h4>
+      <p>The automated pass can only ever move an item <b>toward</b> being restricted. It can flag, it can
+      propose a redaction, it can escalate to withheld. It <b>cannot approve anything, clear anything, or
+      remove a flag a human has set</b>. A model that could mark records safe for release would be a
+      liability; one that can only raise its hand is a net.</p>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="sechead"><h2>Watch it run</h2>
+      <span class="more tag">Simulated on a sample document</span></div>
+    <div class="demo">
+      <div>
+        <div class="docpane" id="doc"></div>
+        <p class="btnrow" style="margin-top:14px">
+          <button class="btn primary" id="run">Run the automated pass</button>
+          <button class="btn" id="reset">Reset</button>
+        </p>
+        <p style="font-family:var(--sans);font-size:12.5px;color:var(--faint);margin-top:10px;line-height:1.55">
+          A fabricated patient care report, written for this demo. The identifiers in it are deliberately
+          invalid. Nothing here is a real record and no real document has been processed.
+        </p>
+      </div>
+      <div>
+        <h3 style="font-family:var(--sans);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)">
+          Detections</h3>
+        <ul class="detlist" id="dets"></ul>
+        <p id="waiting" style="font-family:var(--sans);font-size:13px;color:var(--faint);margin:10px 0 0">
+          Nothing yet. Press the button.
+        </p>
+        <div class="verdict" id="verdict"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="cols flip">
+      <div>
+        <h2>Where the pages actually go</h2>
+        <p style="color:var(--ink-2);max-width:68ch">
+          This is the question a records coordinator will ask, and it deserves a straight answer: to detect
+          PHI in a document, something has to read the document. So where does that reading happen?
+        </p>
+        <table class="roles" style="width:100%;border-collapse:collapse;font-size:14px;margin:14px 0 6px">
+          <tr>
+            <th style="text-align:left;font-family:var(--sans);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);padding:9px 11px;background:var(--band);border:1px solid var(--rule)">Pass</th>
+            <th style="text-align:left;font-family:var(--sans);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);padding:9px 11px;background:var(--band);border:1px solid var(--rule)">Runs where</th>
+            <th style="text-align:left;font-family:var(--sans);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);padding:9px 11px;background:var(--band);border:1px solid var(--rule)">Catches</th>
+          </tr>
+          <tr>
+            <td style="padding:10px 11px;border:1px solid var(--rule)"><b>Pattern pass</b></td>
+            <td style="padding:10px 11px;border:1px solid var(--rule)">On my machine. Nothing leaves it.</td>
+            <td style="padding:10px 11px;border:1px solid var(--rule)">Social Security numbers, dates of birth, phone numbers, addresses, driver's licence and plate formats, medical vocabulary, form types</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 11px;border:1px solid var(--rule)"><b>Local model pass</b></td>
+            <td style="padding:10px 11px;border:1px solid var(--rule)">On my machine. Nothing leaves it.</td>
+            <td style="padding:10px 11px;border:1px solid var(--rule)">Person and place names, the difference between a crew roster and a discipline file, medical narrative in prose</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 11px;border:1px solid var(--rule)"><b>Cloud model pass</b><br><span class="tag">optional &middot; off by default</span></td>
+            <td style="padding:10px 11px;border:1px solid var(--rule)">A vendor API &mdash; <b>only with the Unit's written approval</b>, and only on pages the local passes cleared as non-sensitive</td>
+            <td style="padding:10px 11px;border:1px solid var(--rule)">Description, subject indexing, reading difficult handwriting &mdash; enrichment, not screening</td>
+          </tr>
+        </table>
+        <p style="font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.6;margin-top:12px">
+          The screening passes are local by design, because sending a page to a third party in order to find
+          out whether it contains PHI means the PHI has already left the building. The cloud pass is a
+          separate, optional thing, aimed at material already cleared, and it stays switched off until the
+          Unit says otherwise in writing.
+        </p>
+
+        <h2 style="margin-top:1.8em">What it is bad at</h2>
+        <p style="color:var(--ink-2);max-width:68ch">
+          Stating this plainly matters more than the capability list, because the failure mode is a record
+          going public that should not have:
+        </p>
+        <ul class="limits" style="color:var(--ink-2);padding-left:1.15em;max-width:68ch">
+          <li><b>Handwriting.</b> OCR on a 1960s carbon copy in cursive is poor, and the pass can only flag
+            what it can read. A name it cannot read is a name it cannot flag.</li>
+          <li><b>Context.</b> A name on a promotion announcement is fine. The same name on a complaint file
+            is not. The pass sees text, not the situation.</li>
+          <li><b>Photographs.</b> A street number on a mailbox, a face, a plate in frame &mdash; these are
+            not text and will not be caught by a text pass.</li>
+          <li><b>Confidence is not correctness.</b> A high score means the pattern matched, not that the
+            judgement was right.</li>
+        </ul>
+        <p style="color:var(--ink-2);max-width:68ch">
+          Which is why the default stays what it already was: <b>unreviewed means private</b>. The automated
+          pass shortens the queue and catches the obvious; it does not reduce what needs a human. Nothing is
+          published because a model said it was fine.
+        </p>
+      </div>
+
+      <aside class="facets">
+        <div class="fgroup">
+          <h3>What gets recorded</h3>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--muted);margin:0">
+            Every flag is written with the rule or model that raised it, its version, the page and character
+            range, a confidence score, and a timestamp. A reviewer can see why an item was flagged, and the
+            Unit can spot-check whether the pass is any good.
+          </p>
+        </div>
+        <div class="fgroup">
+          <h3>Measured, not asserted</h3>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--muted);margin:0">
+            During the pilot I would hand-label a sample of pages and report how the pass actually performed
+            &mdash; what it caught, and more importantly what it missed. A flagging tool with no measured
+            miss rate is a comfort blanket.
+          </p>
+        </div>
+        <div class="fgroup">
+          <h3>A human still reads everything</h3>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--muted);margin:0">
+            Every item reaching the public has been looked at by a Unit reviewer. The pass changes the order
+            of the queue and what is highlighted in it. It does not remove a step.
+          </p>
+        </div>
+        <div class="fgroup">
+          <h3>Related</h3>
+          <a class="btn" href="review.html" style="margin-bottom:8px">The review queue</a>
+          <a class="btn" href="proposal.html#flagging">In the proposal</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  // A fabricated document. Identifiers are deliberately invalid.
+  const LINES = [
+    {t:"NEVADA-YUBA-PLACER UNIT", hd:true},
+    {t:"PATIENT CARE REPORT - attachment to incident packet", hd:true},
+    {t:""},
+    {t:"INCIDENT: Pendola          DATE: 10/14/1999     UNIT: Medic 60"},
+    {t:""},
+    {t:"PATIENT: ", det:{id:"name", text:"Ellen M. Rutherford", kind:"phi"}},
+    {t:"DOB: ", det:{id:"dob", text:"03/22/1941", kind:"phi"}, after:"      AGE: 58     SEX: F"},
+    {t:"SSN: ", det:{id:"ssn", text:"000-12-3456", kind:"phi"}},
+    {t:"ADDRESS: ", det:{id:"addr", text:"1200 Example Road, Dobbins CA", kind:"civ"}},
+    {t:"PHONE: ", det:{id:"tel", text:"(555) 0100", kind:"civ"}},
+    {t:""},
+    {t:"CHIEF COMPLAINT: ", det:{id:"med", text:"smoke inhalation, dyspnea on exertion", kind:"phi"}},
+    {t:"HISTORY: ", det:{id:"hist", text:"COPD, prescribed albuterol", kind:"phi"}},
+    {t:"TRANSPORTED TO: ", det:{id:"dest", text:"Western Regional Medical Center", kind:"phi"}},
+    {t:""},
+    {t:"CREW: Capt. ", det:{id:"crew", text:"R. Vandermeer", kind:"pers"}, after:"  FAE J. Oakley"},
+    {t:"NARRATIVE: Patient found seated outside the structure, alert and"},
+    {t:"oriented. Oxygen administered by non-rebreather. Transported code 2."}
+  ];
+  const DETS = {
+    ssn:  {label:"Social Security number", why:"Nine-digit pattern in an SSN field", conf:"0.99", kind:"phi"},
+    dob:  {label:"Date of birth", why:"Date in a DOB field, with an age field alongside", conf:"0.97", kind:"phi"},
+    name: {label:"Patient name", why:"Person name in a PATIENT field on a care report", conf:"0.96", kind:"phi"},
+    med:  {label:"Medical condition", why:"Clinical vocabulary in a chief complaint field", conf:"0.94", kind:"phi"},
+    hist: {label:"Medical history and medication", why:"Diagnosis and prescription named in prose", conf:"0.93", kind:"phi"},
+    dest: {label:"Transport destination", why:"Receiving facility named &mdash; identifying in combination", conf:"0.88", kind:"phi"},
+    addr: {label:"Civilian address", why:"Street address of a private residence", conf:"0.95", kind:"civ"},
+    tel:  {label:"Telephone number", why:"Phone pattern in a civilian contact field", conf:"0.92", kind:"civ"},
+    crew: {label:"Employee name", why:"Member name present &mdash; historical context, not derogatory", conf:"0.71", kind:"pers"}
+  };
+  const KINDCLASS = {phi:"phi", pers:"pers", civ:""};
+  const KINDBADGE = {phi:["bk-phi","PHI"], pers:["bk-pers","Personnel"], civ:["bk-civ","Civilian"]};
+
+  // build the document
+  const doc = el("#doc");
+  doc.innerHTML = LINES.map(l => {
+    if(l.det){
+      const cls = KINDCLASS[l.det.kind] || "";
+      return `<span class="${l.hd?'hd':''}">${esc(l.t)}</span>` +
+             `<mark class="det ${cls}" id="m-${l.det.id}">${esc(l.det.text)}</mark>` +
+             `${l.after ? esc(l.after) : ""}`;
+    }
+    return `<span class="${l.hd?'hd':''}">${esc(l.t)}</span>`;
+  }).join("\n");
+
+  const order = ["ssn","dob","name","med","hist","dest","addr","tel","crew"];
+  let timers = [];
+
+  function reset(){
+    timers.forEach(clearTimeout); timers = [];
+    els("mark.det").forEach(m => m.classList.remove("on"));
+    el("#dets").innerHTML = "";
+    el("#verdict").classList.remove("on");
+    el("#waiting").style.display = "block";
+    el("#run").disabled = false;
+    el("#run").textContent = "Run the automated pass";
+  }
+
+  el("#reset").addEventListener("click", reset);
+  el("#run").addEventListener("click", () => {
+    reset();
+    el("#run").disabled = true;
+    el("#run").textContent = "Reading every page…";
+    el("#waiting").style.display = "none";
+
+    order.forEach((id, i) => {
+      timers.push(setTimeout(() => {
+        const d = DETS[id];
+        el("#m-" + id).classList.add("on");
+        const [bc, bl] = KINDBADGE[d.kind];
+        const li = document.createElement("li");
+        li.className = "on";
+        li.innerHTML = `<span class="conf">${d.conf}</span>
+          <span class="k"><span class="badge-kind ${bc}">${bl}</span>${d.label}</span>
+          <span class="v">${d.why}</span>`;
+        el("#dets").appendChild(li);
+      }, 300 + i * 420));
+    });
+
+    timers.push(setTimeout(() => {
+      el("#verdict").innerHTML =
+        `<b>Proposed disposition: withhold in full.</b><br>
+         Six PHI detections on a patient care report. The pass does not redact its way around a document
+         whose purpose is clinical &mdash; it escalates the whole item and says why.<br><br>
+         Status set to <b>unreviewed</b>, flagged <b>health information</b>, queued for a Unit reviewer.
+         It is not public, and this pass cannot make it public.`;
+      el("#verdict").classList.add("on");
+      el("#run").textContent = "Pass complete";
+    }, 300 + order.length * 420 + 350));
+  });
+})();
+</script>
+</body>
+</html>
