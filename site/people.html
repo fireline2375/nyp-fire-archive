@@ -7,25 +7,25 @@
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400..600&family=Inter:wght@400..700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400..600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 <style>
   .treewrap{position:relative;background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
     overflow:hidden;box-shadow:var(--shadow)}
   #tree{display:block;width:100%;height:clamp(520px,72vh,860px);cursor:grab;touch-action:none}
   #tree.grabbing{cursor:grabbing}
-  .link{fill:none;stroke:#cfc7ba;stroke-width:1.4px}
-  .link.lineage{stroke:var(--ember);stroke-width:2.2px}
-  .link.dim{stroke:#e7e1d7}
+  .link{fill:none;stroke:#ced4da;stroke-width:1.4px}
+  .link.lineage{stroke:var(--red);stroke-width:2.4px}
+  .link.dim{stroke:#e6e9ee}
   .alsolink{fill:none;stroke:var(--brass);stroke-width:1.6px;stroke-dasharray:5 4;opacity:.9}
   .node{cursor:pointer}
   .node circle{stroke:#fff;stroke-width:1.6px;transition:opacity .35s}
   .node text{font-family:var(--sans);font-size:11.5px;fill:var(--ink-2);paint-order:stroke;
     stroke:#fff;stroke-width:3.4px;stroke-linejoin:round;transition:opacity .35s}
-  .node.structural text{font-weight:650;font-size:12.5px;fill:var(--ink)}
+  .node.structural text{font-weight:700;font-size:12.5px;fill:var(--ink)}
   .node.unit text{font-size:15px}
   .node.era text{font-weight:500;fill:var(--muted);font-size:11px}
-  .node.hit text{fill:var(--ember);font-weight:650}
+  .node.hit text{fill:var(--red);font-weight:700}
   .node.inactive circle{opacity:.17}
   .node.inactive text{opacity:.3}
   .node.sel circle{stroke:var(--ink);stroke-width:2.6px}
@@ -33,7 +33,7 @@
   .overlay{position:absolute;left:0;right:0;bottom:0;padding:12px 16px;display:flex;gap:14px;align-items:center;
     background:linear-gradient(to top,rgba(255,255,255,.97),rgba(255,255,255,.82),rgba(255,255,255,0));
     font-family:var(--sans);font-size:13px;flex-wrap:wrap}
-  .yearbig{font-family:var(--sans);font-weight:650;font-size:26px;letter-spacing:-.02em;
+  .yearbig{font-family:var(--sans);font-weight:700;font-size:26px;letter-spacing:-.02em;
     font-variant-numeric:tabular-nums;color:var(--ink);min-width:3.6ch}
   input[type=range]{flex:1;min-width:180px;accent-color:var(--ember)}
   .legend{display:flex;gap:13px;flex-wrap:wrap;font-family:var(--sans);font-size:12px;color:var(--muted);
@@ -68,7 +68,7 @@
       and the people who stood a watch there. Drag the year and the Unit fills and empties around you.
     </p>
 
-    <div class="note" style="border-left-color:var(--brass)">
+    <div class="note" style="border-left-color:var(--gold)"><!-- real structure, invented people -->
       <h4 style="color:var(--brass)">Real structure, invented people</h4>
       <p><b>The battalions and stations are real.</b> Battalions 11, 12, 13, 15, 16 and 17, and the stations
       under them, are taken from the CAL FIRE Nevada-Yuba-Placer Unit 2026 Strategic Fire Plan &mdash; the
@@ -107,15 +107,15 @@
           </div>
         </div>
         <div class="legend">
-          <span><i style="background:#1b1a18"></i>Unit</span>
-          <span><i style="background:#3b4b38"></i>Battalion</span>
-          <span><i style="background:#8a6a2c"></i>Station</span>
-          <span><i style="background:#b9b2a6"></i>Era</span>
+          <span><i style="background:#14171c"></i>Unit</span>
+          <span><i style="background:#212f5c"></i>Battalion</span>
+          <span><i style="background:#9a7a15"></i>Station</span>
+          <span><i style="background:#aab2bd"></i>Era</span>
           <span style="margin-left:6px;padding-left:14px;border-left:1px solid var(--rule)">
-            <i style="background:#a8331a"></i>Chief officer</span>
-          <span><i style="background:#c2714a"></i>Captain</span>
-          <span><i style="background:#6d8793"></i>Engineer / specialist</span>
-          <span><i style="background:#9aa3ab"></i>Firefighter</span>
+            <i style="background:#df2c2f"></i>Chief officer</span>
+          <span><i style="background:#8a3042"></i>Captain</span>
+          <span><i style="background:#2d3f78"></i>Engineer / specialist</span>
+          <span><i style="background:#767e87"></i>Firefighter</span>
         </div>
         <p style="font-family:var(--sans);font-size:12.5px;color:var(--faint);margin-top:12px;line-height:1.6">
           Click any station or era to open and close it. Drag to pan, scroll to zoom, hover a person to trace
@@ -135,9 +135,10 @@
 <script src="assets/app.js"></script>
 <script>
 (function(){
-  const KIND = { unit:"#1b1a18", hq:"#2f3a40", battalion:"#3b4b38", station:"#8a6a2c", era:"#b9b2a6" };
-  const RANKC = lvl => lvl >= 5 ? "#a8331a" : lvl === 4 ? "#a8331a"
-                     : lvl === 3 ? "#c2714a" : lvl === 2 ? "#6d8793" : "#9aa3ab";
+  const KIND = { unit:"#14171c", hq:"#5c6670", battalion:"#212f5c", station:"#9a7a15", era:"#aab2bd" };
+  const RANKC = lvl => lvl >= 4 ? "#df2c2f"                       // chief officers
+                     : lvl === 3 ? "#8a3042"                       // captains
+                     : lvl === 2 ? "#2d3f78" : "#767e87";          // engineers / firefighters
   const RADIUS = { unit:9, hq:7, battalion:7, station:6.5, era:4, person:4.5 };
 
   const svg = d3.select("#tree");
