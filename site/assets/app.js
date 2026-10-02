@@ -118,6 +118,7 @@ function chrome(){
         ${NAV.slice(1,4).map(([h,l]) => `<a href="${h}">${l}</a>`).join("")}
         <a href="browse.html?type=film">At-risk media</a></div>
       <div><h4>For the Unit</h4>
+        <a href="signin.html">Sign in (example)</a>
         <a href="review.html">Review queue demo</a>
         <a href="proposal.html#privacy">Privacy safeguards</a>
         <a href="proposal.html#custody">Chain of custody</a></div>

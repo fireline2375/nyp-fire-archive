@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in &middot; NEU/NYP Archive</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400..600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .authwrap{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:48px;align-items:start}
+  .authcard{
+    background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
+    padding:30px 30px 26px;box-shadow:var(--shadow);
+  }
+  .authcard .mark{
+    width:44px;height:44px;border-radius:3px;background:var(--navy);display:grid;place-items:center;
+    color:var(--gold);font-weight:700;font-size:13px;letter-spacing:.03em;margin-bottom:18px;
+  }
+  .authcard h1{font-size:1.5rem;margin-bottom:.3em}
+  .authcard .sub{color:var(--muted);font-size:14.5px;line-height:1.55;margin-bottom:24px}
+  .sso{display:flex;flex-direction:column;gap:11px;margin-bottom:6px}
+  .sso button{
+    display:flex;align-items:center;justify-content:center;gap:11px;width:100%;
+    font-family:var(--sans);font-size:15px;font-weight:600;padding:12px 16px;border-radius:4px;
+    cursor:pointer;border:1px solid transparent;transition:filter .12s, box-shadow .12s;
+  }
+  .sso button:hover{filter:brightness(.97);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  .sso button:active{filter:brightness(.94)}
+  .sso .google{background:#fff;color:#1f1f1f;border-color:#dadce0}
+  .sso .apple{background:#000;color:#fff;border-color:#000}
+  .sso svg{flex:none}
+  .ssohint{font-size:12.5px;color:var(--faint);line-height:1.55;margin:14px 0 0}
+  .orline{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--faint);font-size:12px;
+    letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+  .orline::before,.orline::after{content:"";height:1px;background:var(--rule);flex:1}
+  .statebtn{
+    display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--band);
+    color:var(--ink-2);border:1px dashed var(--rule-2);border-radius:4px;padding:11px 16px;
+    font-family:var(--sans);font-size:14px;font-weight:600;cursor:not-allowed;
+  }
+  .mockbar{
+    background:#fdf6e3;border:1px solid #ecdca8;color:#6d4c11;border-radius:4px;
+    padding:11px 13px;font-size:13px;line-height:1.55;margin-bottom:22px;
+  }
+  .mockbar b{color:#4e360a}
+  .signedin{
+    display:none;border:1px solid var(--rule);border-left:4px solid var(--green);
+    border-radius:0 var(--radius) var(--radius) 0;background:var(--card);padding:20px 22px;margin-top:22px;
+  }
+  .signedin.on{display:block}
+  .signedin h3{font-size:1.1rem;margin:0 0 4px}
+  .avatar{
+    width:38px;height:38px;border-radius:50%;background:var(--navy-lt);color:#fff;display:grid;
+    place-items:center;font-weight:700;font-size:14px;flex:none;
+  }
+  .rolerow{display:flex;gap:13px;align-items:center;margin-bottom:16px}
+  .perm{list-style:none;padding:0;margin:0 0 18px;font-size:14px}
+  .perm li{padding:5px 0 5px 24px;position:relative;line-height:1.5}
+  .perm li::before{content:"";position:absolute;left:4px;top:11px;width:9px;height:9px;border-radius:2px}
+  .perm li.yes::before{background:var(--green)}
+  .perm li.no::before{background:var(--rule-2)}
+  .perm li.no{color:var(--faint)}
+  table.roles{width:100%;border-collapse:collapse;font-size:14px;margin:6px 0 0}
+  table.roles th{text-align:left;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+    color:var(--faint);font-weight:700;padding:8px 10px;background:var(--band);border:1px solid var(--rule)}
+  table.roles td{padding:9px 10px;border:1px solid var(--rule);vertical-align:top}
+  @media (max-width:880px){ .authwrap{grid-template-columns:1fr;gap:34px} }
+</style>
+</head>
+<body>
+<div class="demobar"><div class="wrap">
+  <b>Demonstration prototype</b>
+  <span>Every record shown is invented sample data &middot; not an official CAL FIRE site &middot; no real records are published here</span>
+</div></div>
+
+<section style="padding:36px 0 60px">
+  <div class="wrap">
+    <p class="crumb"><a href="index.html">Home</a> &rsaquo; Sign in</p>
+    <p class="eyebrow">Example only &middot; nothing is connected</p>
+    <h1 style="max-width:26ch">The sign-in behind the gate</h1>
+    <p style="font-size:1.1rem;color:var(--ink-2);max-width:66ch;margin-bottom:34px">
+      Approving or withholding a record is the one action on this site that changes what the public can see,
+      so it sits behind a named account. This is a mockup of what that sign-in would look like.
+    </p>
+
+    <div class="authwrap">
+      <div>
+        <div class="authcard">
+          <div class="mark">NYP</div>
+          <h1>Unit and archivist sign-in</h1>
+          <p class="sub">For Unit reviewers, the records coordinator, the PIO, and the project archivist.</p>
+
+          <div class="mockbar">
+            <b>This is a picture of a sign-in, not a sign-in.</b> The buttons below are not connected to
+            Google, Apple, or anything else. No account is created, no password is ever asked for, and
+            nothing is sent anywhere. Press one and it will show you what would happen next.
+          </div>
+
+          <div class="sso">
+            <button type="button" class="google" data-provider="google">
+              <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+                <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.71-1.57 2.68-3.88 2.68-6.62z"/>
+                <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.81.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.34A9 9 0 0 0 9 18z"/>
+                <path fill="#FBBC05" d="M3.97 10.72a5.41 5.41 0 0 1 0-3.44V4.94H.96a9 9 0 0 0 0 8.12l3.01-2.34z"/>
+                <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.94l3.01 2.34C4.68 5.16 6.66 3.58 9 3.58z"/>
+              </svg>
+              Sign in with Google
+            </button>
+            <button type="button" class="apple" data-provider="apple">
+              <svg width="17" height="20" viewBox="0 0 16 20" fill="currentColor" aria-hidden="true">
+                <path d="M13.2 10.6c0-2.3 1.7-3.4 1.8-3.5-1-1.4-2.5-1.6-3-1.6-1.4-.1-2.5.8-3.2.8-.7 0-1.7-.8-2.8-.8-1.5 0-2.9.9-3.6 2.2-1.6 2.7-.4 6.7 1.1 8.9.7 1.1 1.6 2.3 2.7 2.2 1.1 0 1.5-.7 2.8-.7s1.6.7 2.8.7 1.9-1.1 2.6-2.2c.8-1.2 1.1-2.4 1.1-2.5-.1 0-2.3-.9-2.3-3.5z"/>
+                <path d="M11.1 3.7c.6-.7 1-1.7.9-2.7-.9 0-2 .6-2.6 1.3-.6.6-1 1.6-.9 2.6 1 .1 2-.5 2.6-1.2z"/>
+              </svg>
+              Sign in with Apple
+            </button>
+          </div>
+
+          <p class="ssohint">
+            Single sign-on only. The project never sees, stores, or asks for a password &mdash; the identity
+            provider handles that, and whatever two-factor the Unit already requires comes along with it.
+          </p>
+
+          <div class="orline">or</div>
+          <div class="statebtn" aria-disabled="true">
+            State of California account &mdash; not configured
+          </div>
+          <p class="ssohint">
+            For actual Unit staff this is the option that should exist. See the note on the right.
+          </p>
+        </div>
+
+        <div class="signedin" id="signedin">
+          <p class="tag" style="margin:0 0 10px">Simulated &mdash; no authentication took place</p>
+          <div class="rolerow">
+            <span class="avatar" id="av">BC</span>
+            <div>
+              <h3 id="who">Signed in</h3>
+              <p style="margin:0;font-size:13px;color:var(--muted)" id="via">&nbsp;</p>
+            </div>
+          </div>
+          <p style="font-size:14px;color:var(--ink-2);margin:0 0 10px"><b>Role: Unit reviewer.</b> What this account could do:</p>
+          <ul class="perm">
+            <li class="yes">Approve a record for public release</li>
+            <li class="yes">Withhold a record, or approve a redacted copy</li>
+            <li class="yes">See withheld records and the private catalog</li>
+            <li class="yes">Pull a published record back down, immediately</li>
+            <li class="no">Delete a record or a master file &mdash; nobody has this</li>
+            <li class="no">Edit the audit trail &mdash; nobody has this either</li>
+          </ul>
+          <p class="btnrow" style="margin:0">
+            <a class="btn primary" href="review.html">Open the review queue</a>
+            <button class="btn" type="button" id="out">Sign out</button>
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <h2 style="font-size:1.3rem">Why Google and Apple</h2>
+        <p style="color:var(--ink-2)">
+          Because it means this project never handles a password. There is no password field on this page and
+          there is no password column in the database &mdash; the identity provider authenticates the person
+          and hands back a token. One less thing to lose.
+        </p>
+        <p style="color:var(--ink-2)">
+          Both are supported out of the box by Supabase Auth, which is already the platform in the proposal,
+          so this is configuration rather than custom code.
+        </p>
+
+        <div class="note">
+          <h4>The option that matters more</h4>
+          <p style="margin-bottom:0">For Unit staff, the right answer is almost certainly the Unit&rsquo;s own
+          <b>State of California account</b> rather than a personal Google or Apple login &mdash; so that
+          access follows the person&rsquo;s employment, and leaving the Unit removes it automatically. That is
+          a conversation with whoever runs identity for the department, and it is why that third button is
+          shown greyed out rather than left off. Google and Apple cover the volunteer side and anyone outside
+          the state directory.</p>
+        </div>
+
+        <h2 style="font-size:1.3rem;margin-top:1.7em">Roles</h2>
+        <table class="roles">
+          <tr><th>Role</th><th>Held by</th><th>Can do</th></tr>
+          <tr>
+            <td><b>Unit reviewer</b></td>
+            <td>Unit-designated staff</td>
+            <td>Approve, withhold, redact, and take down. The only role that can make anything public.</td>
+          </tr>
+          <tr>
+            <td><b>Archivist</b></td>
+            <td>The volunteer &mdash; me</td>
+            <td>Ingest scans, catalog, describe, and flag for review. Cannot approve anything.</td>
+          </tr>
+          <tr>
+            <td><b>Unit viewer</b></td>
+            <td>Anyone at the Unit</td>
+            <td>Browse the full private catalog, including withheld items. No write access.</td>
+          </tr>
+          <tr>
+            <td><b>Public</b></td>
+            <td>Not signed in</td>
+            <td>Approved records only. Cannot see that a withheld record exists.</td>
+          </tr>
+        </table>
+        <p style="font-family:var(--sans);font-size:13px;color:var(--faint);line-height:1.6;margin-top:12px">
+          Note that the archivist &mdash; the person doing all the work &mdash; is deliberately the role that
+          cannot publish. That separation is the whole point of the gate.
+        </p>
+
+        <h2 style="font-size:1.3rem;margin-top:1.7em">What sits behind it</h2>
+        <ul style="color:var(--ink-2);padding-left:1.15em">
+          <li style="margin-bottom:.5em">Row Level Security decides what each role may read, in the database
+            rather than the application. A signed-out visitor is a role with almost no permissions.</li>
+          <li style="margin-bottom:.5em">No shared logins. Every approve, withhold and redact is written to an
+            audit trail against a named person with a timestamp.</li>
+          <li style="margin-bottom:.5em">Sessions expire. Access is removed by the Unit at any time, without
+            needing anything from me.</li>
+          <li style="margin-bottom:.5em">Masters and unredacted originals live in a private bucket reachable
+            only by short-lived signed URL. Approving a record does not move the master.</li>
+        </ul>
+        <p style="margin-top:22px"><a href="proposal.html#safeguards">Read the safeguards in the proposal &rarr;</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  // A simulation. No OAuth, no network request, no account, no credential.
+  const PRETEND = {
+    google: { name:"B. Chief", via:"Simulated Google account · chief@example.invalid", initials:"BC" },
+    apple:  { name:"R. Coordinator", via:"Simulated Apple account · hidden relay address", initials:"RC" }
+  };
+  const panel = el("#signedin");
+  els(".sso button").forEach(b => b.addEventListener("click", () => {
+    const p = PRETEND[b.dataset.provider];
+    el("#who").textContent = p.name;
+    el("#via").textContent = p.via;
+    el("#av").textContent = p.initials;
+    panel.classList.add("on");
+    panel.scrollIntoView({behavior:"smooth", block:"nearest"});
+  }));
+  el("#out").addEventListener("click", () => panel.classList.remove("on"));
+})();
+</script>
+</body>
+</html>
