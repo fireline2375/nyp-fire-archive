@@ -95,7 +95,7 @@ const ITEMS = [
   { id:"NYP-006", t:"Structure protection briefing, 16mm reel", type:"film", year:1979,
     inc:null, stn:"s20", bn:null, series:"Training Material", fmt:"16mm, 400 ft",
     box:"Media tote 1", folder:"Can 3", risk:"critical", status:"unreviewed",
-    d:"Training reel on structure protection in the wildland-urban interface. Can shows corrosion; a faint vinegar odor was noted during the shelf survey. Flagged for priority transfer." },
+    d:"Training reel on structure protection in the wildland-urban interface. Can shows corrosion and a faint vinegar odor. Flagged for priority transfer." },
 
   { id:"NYP-007", t:"Station history and roster, Nevada City", type:"document", year:1962,
     inc:null, stn:"s20", bn:"Battalion 12", series:"Station Records", fmt:"Paper, bound",
