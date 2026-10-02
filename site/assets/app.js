@@ -133,7 +133,8 @@ function chrome(){
       demonstrate the interface &mdash; none of it is a real archival record, and no real document, photograph,
       personnel record, or medical information has been published. Incident names come from the public
       historical record; the holdings attached to them are fictional. Nothing on this site should be cited
-      as a source.
+      as a source. This site cannot accept a California Public Records Act request &mdash; those go to the
+      CAL FIRE Public Records Center, handled by the Department&rsquo;s Legal Office.
     </div>
   </div>`;
   document.body.appendChild(f);

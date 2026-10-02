@@ -43,6 +43,7 @@ def inline(el):
 ALIAS = [("protected health", "privacy"), ("how the platform", "safeguards"),
          ("automated flagging", "flagging"),
          ("ai-assisted search", "aisearch"),
+         ("how this relates to public records", "cpra"),
          ("how material would move", "custody"), ("the paperwork", "paperwork"),
          ("what gets published", "publishing"), ("name, domain", "funding"),
          ("if this is more", "tiers"), ("precedent", "precedent"),
