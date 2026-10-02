@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ask the archive &middot; NEU/NYP Archive</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400..600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .askbox{background:var(--card);border:1px solid var(--rule);border-radius:var(--radius);
+    box-shadow:var(--shadow);overflow:hidden}
+  .askhead{padding:16px 20px;border-bottom:1px solid var(--rule);display:flex;gap:12px;align-items:center;
+    background:var(--band)}
+  .askhead .dot{width:9px;height:9px;border-radius:50%;background:var(--green);flex:none}
+  .askhead span{font-family:var(--sans);font-size:12.5px;color:var(--muted)}
+  .qrow{display:flex;gap:9px;flex-wrap:wrap;padding:18px 20px 4px}
+  .qrow button{font-family:var(--sans);font-size:13.5px;text-align:left;background:#fff;
+    border:1px solid var(--rule-2);border-radius:20px;padding:8px 14px;cursor:pointer;color:var(--ink-2)}
+  .qrow button:hover{background:var(--ember-soft);border-color:#c9d1e4;color:var(--navy)}
+  .qrow button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+  .thread{padding:10px 20px 22px;min-height:240px}
+  .bubble{margin:16px 0 0}
+  .bubble .who{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+  .bubble.q .txt{font-family:var(--serif);font-size:1.12rem;color:var(--ink);font-weight:600}
+  .bubble.a .txt{font-size:15.5px;line-height:1.68;color:var(--ink-2)}
+  .bubble.a .txt p{margin:0 0 .85em}
+  .bubble.a .txt p:last-child{margin-bottom:0}
+  cite.src{font-style:normal;font-family:var(--mono);font-size:11.5px;background:var(--ember-soft);
+    color:var(--navy);padding:1px 5px;border-radius:3px;border:1px solid #c9d1e4;white-space:nowrap}
+  cite.src a{color:inherit;text-decoration:none}
+  cite.src a:hover{text-decoration:underline}
+  .refusal{border-left:4px solid var(--warn);background:#fdf6e3;padding:13px 16px;border-radius:0 4px 4px 0}
+  .nothing{border-left:4px solid var(--rule-2);background:var(--band);padding:13px 16px;border-radius:0 4px 4px 0}
+  .scope{font-family:var(--sans);font-size:12px;color:var(--faint);margin-top:12px;padding-top:11px;
+    border-top:1px solid var(--rule);line-height:1.6}
+  .scope b{color:var(--muted)}
+  .typing{display:inline-flex;gap:4px;align-items:center;height:18px}
+  .typing i{width:5px;height:5px;border-radius:50%;background:var(--faint);animation:bl 1s infinite}
+  .typing i:nth-child(2){animation-delay:.15s} .typing i:nth-child(3){animation-delay:.3s}
+  @keyframes bl{0%,60%,100%{opacity:.25}30%{opacity:1}}
+  table.cost{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0 6px}
+  table.cost th{text-align:left;font-family:var(--sans);font-size:11px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--faint);font-weight:700;padding:9px 11px;background:var(--band);
+    border:1px solid var(--rule)}
+  table.cost td{padding:10px 11px;border:1px solid var(--rule);vertical-align:top}
+  table.cost td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="demobar"><div class="wrap">
+  <b>Demonstration prototype</b>
+  <span>Every record shown is invented sample data &middot; not an official CAL FIRE site &middot; no real records are published here</span>
+</div></div>
+
+<section style="padding:36px 0 18px">
+  <div class="wrap">
+    <p class="crumb"><a href="index.html">Home</a> &rsaquo; Ask the archive</p>
+    <p class="eyebrow">Proposed &middot; phase three &middot; only if funded</p>
+    <h1 style="max-width:28ch">Ask the archive a question</h1>
+    <p style="font-size:1.1rem;color:var(--ink-2);max-width:70ch">
+      Keyword search finds documents. It does not answer questions. A retrieval agent reads the approved
+      records, answers in a sentence, and cites the records it used so the answer can be checked. This is
+      the one feature on this site that costs money per use, which is why it sits last and is marked
+      optional.
+    </p>
+
+    <div class="note" style="border-left-color:var(--gold)">
+      <h4 style="color:var(--brass)">Not built &mdash; this is a mock-up</h4>
+      <p style="margin-bottom:0">The answers below are written out in advance, not generated. Nothing is
+      connected to any model and no request leaves this page. The point is to show the <em>shape</em> of the
+      feature, and in particular what it does when it cannot answer.</p>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="cols flip">
+      <div>
+        <div class="askbox">
+          <div class="askhead">
+            <span class="dot"></span>
+            <span>Searching as: <b>a member of the public</b> &middot; 21 approved records visible &middot;
+              4 withheld records not visible</span>
+          </div>
+          <div class="qrow" id="qrow"></div>
+          <div class="thread" id="thread">
+            <p style="font-family:var(--sans);font-size:14px;color:var(--faint);padding:14px 0">
+              Pick a question above.
+            </p>
+          </div>
+        </div>
+
+        <h2 style="margin-top:2em;font-size:1.3rem">What it costs</h2>
+        <p style="color:var(--ink-2);max-width:68ch">
+          A question means sending the retrieved record text to a model and getting a few hundred words back.
+          At current list prices, per question:
+        </p>
+        <table class="cost">
+          <tr><th>Model</th><th>Input / output per million tokens</th><th>Per question</th><th>Per 500 questions</th></tr>
+          <tr>
+            <td><b>Haiku 4.5</b><br><span class="tag">enough for this job</span></td>
+            <td class="n">$1.00 / $5.00</td>
+            <td class="n">~2&cent;</td>
+            <td class="n">~$12</td>
+          </tr>
+          <tr>
+            <td><b>Sonnet 5.5</b></td>
+            <td class="n">$2.00 / $10.00</td>
+            <td class="n">~5&cent;</td>
+            <td class="n">~$24</td>
+          </tr>
+          <tr>
+            <td><b>Opus 5.5</b></td>
+            <td class="n">$4.00 / $20.00</td>
+            <td class="n">~9&cent;</td>
+            <td class="n">~$47</td>
+          </tr>
+        </table>
+        <p style="font-family:var(--sans);font-size:12.5px;color:var(--faint);line-height:1.6">
+          Assumes roughly 20,000 input tokens of retrieved records and a short answer. Prompt caching on the
+          fixed instructions brings the input side down further on repeat use. These are list prices and will
+          change; treat them as an order of magnitude, not a quote.
+        </p>
+        <p style="color:var(--ink-2);max-width:68ch">
+          So the honest version is: <b>a few cents a question, with a hard monthly ceiling.</b> At a $25 cap
+          on the cheap model that is roughly a thousand questions a month. When the cap is reached the
+          feature switches itself off and the box above says so &mdash; it does not quietly keep spending,
+          and it does not degrade into guessing. Ordinary search carries on working, because ordinary search
+          is free.
+        </p>
+      </div>
+
+      <aside class="facets">
+        <div class="fgroup">
+          <h3>It searches as you, not as itself</h3>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--ink-2);margin:0">
+            The agent has no account of its own and no standing access. It runs every query under the
+            permissions of whoever asked. A member of the public asking a question gets an agent that can
+            read exactly the approved records they could have read themselves &mdash; the same row-level
+            rules, no bypass.
+          </p>
+        </div>
+        <div class="fgroup">
+          <h3>Withheld stays invisible</h3>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--muted);margin:0 0 10px">
+            This is the subtle part. When the answer lives in a withheld record, the agent does not say
+            &ldquo;there is a sealed document about that.&rdquo; It says the catalog holds nothing on it,
+            because from where it is standing that is true.
+          </p>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--muted);margin:0">
+            An agent that could report the <em>existence</em> of withheld material would leak the thing the
+            gate exists to protect. Try the second question.
+          </p>
+        </div>
+        <div class="fgroup">
+          <h3>No citation, no claim</h3>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--muted);margin:0">
+            Every sentence of fact carries a record id a researcher can open and check. If the records do not
+            support an answer, the required response is to say so. An archive whose search invents a date is
+            worse than an archive with no search.
+          </p>
+        </div>
+        <div class="fgroup">
+          <h3>Read-only</h3>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--muted);margin:0">
+            It cannot approve, withhold, flag, redact, catalog or edit anything. It is a reader with a
+            citation habit. The <a href="scanning.html">ingest pass</a> and the
+            <a href="review.html">review gate</a> are untouched by it.
+          </p>
+        </div>
+        <div class="fgroup">
+          <h3>Last, not first</h3>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--muted);margin:0">
+            Everything else in this proposal works without it. This is the only part with a per-use bill, so
+            it belongs after the archive exists and has proved useful &mdash; and it is the obvious thing to
+            point a <a href="proposal.html#funding">fundraiser</a> at, because the cost is legible.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  const cite = id => `<cite class="src"><a href="item.html?id=${id}">${id}</a></cite>`;
+
+  const QA = [
+    {
+      q: "What do you have on the 49er Fire?",
+      scope: "Read 5 approved records. 0 withheld records were visible to this search.",
+      a: `<p>Five records in the public catalog are tied to the 49er Fire, 1988, Nevada County,
+          33,700 acres.</p>
+         <p>The operational paperwork is an Incident Action Plan covering the third operational period,
+          with division assignments and a hand-annotated organization chart ${cite("NYP-001")}, and a
+          division supervisor's unit log on carbon copy ${cite("NYP-003")}. There is a hand-coloured fire
+          progression map for days one through four, drawn on a USGS quadrangle base ${cite("NYP-004")}.</p>
+         <p>Two photographic items: a colour negative of the eastern perimeter shot from a fixed-wing
+          aircraft ${cite("NYP-002")}, and a mounted Kodachrome transparency of an engine company at the
+          staging area ${cite("NYP-005")}. Both are flagged as at risk &mdash; the negative shows dye shift
+          and the transparency is fading in the magenta layer.</p>`
+    },
+    {
+      q: "Were there any injuries on the Pendola Fire?",
+      scope: "Read 2 approved records. 0 withheld records were visible to this search.",
+      kind: "refusal",
+      a: `<p><b>Nothing in the catalog answers that.</b></p>
+         <p>The public records for the Pendola Fire, 1999, are a complete run of ICS-209 incident status
+          summaries from initial attack through containment ${cite("NYP-010")} and a print of dozer line
+          construction on a steep slope ${cite("NYP-009")}. Neither records casualties.</p>
+         <p>I cannot tell you whether the question is unanswerable because no such record was ever created,
+          because it was not kept, or because it is not public. From here those look identical.</p>`
+    },
+    {
+      q: "Who was the Unit Chief in 1975?",
+      scope: "Read 0 records. Nothing in the catalog is indexed to that question.",
+      kind: "nothing",
+      a: `<p><b>I do not know, and the catalog does not establish it.</b></p>
+         <p>There is a mimeographed Unit newsletter from 1976 that covers promotions and retirements
+          ${cite("NYP-017")}, which is the nearest thing, but it is not a roster and I will not infer a name
+          from it.</p>
+         <p>This is a gap, not an error. An archive that answered this by guessing would be worse than one
+          that admits the record is not there.</p>`
+    }
+  ];
+
+  const row = el("#qrow"), thread = el("#thread");
+  row.innerHTML = QA.map((x, i) => `<button type="button" data-i="${i}">${esc(x.q)}</button>`).join("");
+
+  let busy = false;
+  els("#qrow button").forEach(b => b.addEventListener("click", () => {
+    if(busy) return;
+    busy = true;
+    els("#qrow button").forEach(x => x.classList.toggle("on", x === b));
+    const x = QA[+b.dataset.i];
+
+    thread.innerHTML =
+      `<div class="bubble q"><p class="who">Question</p><p class="txt">${esc(x.q)}</p></div>
+       <div class="bubble a"><p class="who">Archive</p>
+         <div class="txt" id="ans"><span class="typing"><i></i><i></i><i></i></span></div></div>`;
+
+    setTimeout(() => {
+      const cls = x.kind === "refusal" ? "refusal" : x.kind === "nothing" ? "nothing" : "";
+      el("#ans").innerHTML =
+        (cls ? `<div class="${cls}">${x.a}</div>` : x.a) +
+        `<p class="scope"><b>What this search could see:</b> ${esc(x.scope)}</p>`;
+      busy = false;
+    }, 950);
+  }));
+})();
+</script>
+</body>
+</html>
