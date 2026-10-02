@@ -160,21 +160,26 @@
             <td style="padding:10px 11px;border:1px solid var(--rule)">Social Security numbers, dates of birth, phone numbers, addresses, driver's licence and plate formats, medical vocabulary, form types</td>
           </tr>
           <tr>
-            <td style="padding:10px 11px;border:1px solid var(--rule)"><b>Local model pass</b></td>
+            <td style="padding:10px 11px;border:1px solid var(--rule)"><b>Local model pass</b><br><span class="tag">open weights, on-device</span></td>
             <td style="padding:10px 11px;border:1px solid var(--rule)">On my machine. Nothing leaves it.</td>
             <td style="padding:10px 11px;border:1px solid var(--rule)">Person and place names, the difference between a crew roster and a discipline file, medical narrative in prose</td>
           </tr>
           <tr>
-            <td style="padding:10px 11px;border:1px solid var(--rule)"><b>Cloud model pass</b><br><span class="tag">optional &middot; off by default</span></td>
-            <td style="padding:10px 11px;border:1px solid var(--rule)">A vendor API &mdash; <b>only with the Unit's written approval</b>, and only on pages the local passes cleared as non-sensitive</td>
-            <td style="padding:10px 11px;border:1px solid var(--rule)">Description, subject indexing, reading difficult handwriting &mdash; enrichment, not screening</td>
+            <td style="padding:10px 11px;border:1px solid var(--rule)"><b>Hosted model pass</b><br><span class="tag">e.g. Claude &middot; off by default</span></td>
+            <td style="padding:10px 11px;border:1px solid var(--rule)">In the vendor's data centre &mdash; a hosted assistant cannot be installed locally, so pages are sent over the internet. <b>Only with the Unit's written approval</b>, and only on pages the local passes cleared</td>
+            <td style="padding:10px 11px;border:1px solid var(--rule)">Description, subject indexing, difficult handwriting, and the contextual judgement local tooling is worst at &mdash; enrichment, not screening</td>
           </tr>
         </table>
         <p style="font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.6;margin-top:12px">
           The screening passes are local by design, because sending a page to a third party in order to find
-          out whether it contains PHI means the PHI has already left the building. The cloud pass is a
-          separate, optional thing, aimed at material already cleared, and it stays switched off until the
-          Unit says otherwise in writing.
+          out whether it contains PHI means the PHI has already left the building. A hosted model such as
+          Claude is a separate decision and the Unit&rsquo;s to make &mdash; it is genuinely better at the
+          contextual judgement listed under &ldquo;what it is bad at&rdquo; below, but it cannot run on a
+          laptop, so using it means document text leaves the building. The protections for that are real and
+          obtainable &mdash; no training on API content, default deletion inside thirty days, zero-retention
+          agreements, and HIPAA-ready access under a signed business associate agreement where PHI is
+          involved &mdash; but they have to be in writing, not assumed. My recommendation is to run the
+          pilot entirely locally and revisit this once there is something concrete to judge.
         </p>
 
         <h2 style="margin-top:1.8em">What it is bad at</h2>
