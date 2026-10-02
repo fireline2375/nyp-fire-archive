@@ -183,13 +183,24 @@
         <table class="roles">
           <tr><th>Role</th><th>Held by</th><th>Can do</th></tr>
           <tr>
+            <td><b>Unit administrator</b></td>
+            <td>Named by the Chief &mdash; records coordinator or a chief officer</td>
+            <td>The only role that can grant or revoke release authority. Does not approve records itself.</td>
+          </tr>
+          <tr>
             <td><b>Unit reviewer</b></td>
-            <td>Unit-designated staff</td>
+            <td>Unit staff, named by the Unit administrator</td>
             <td>Approve, withhold, redact, and take down. The only role that can make anything public.</td>
           </tr>
           <tr>
+            <td><b>Master archivist</b></td>
+            <td>The volunteer &mdash; me, for now</td>
+            <td>Runs the accounts and the platform. Ingests and catalogs. <b>Cannot approve a record and
+              cannot grant release authority.</b></td>
+          </tr>
+          <tr>
             <td><b>Archivist</b></td>
-            <td>The volunteer &mdash; me</td>
+            <td>Any additional volunteer</td>
             <td>Ingest scans, catalog, describe, and flag for review. Cannot approve anything.</td>
           </tr>
           <tr>
@@ -205,8 +216,10 @@
         </table>
         <p style="font-family:var(--sans);font-size:13px;color:var(--faint);line-height:1.6;margin-top:12px">
           Note that the archivist &mdash; the person doing all the work &mdash; is deliberately the role that
-          cannot publish. That separation is the whole point of the gate.
+          cannot publish, and the master archivist cannot even hand that power out. That separation is the
+          whole point of the gate.
         </p>
+        <p style="margin-top:16px"><a class="btn" style="display:inline-block" href="admin.html">See how accounts and roles are administered &rarr;</a></p>
 
         <h2 style="font-size:1.3rem;margin-top:1.7em">What sits behind it</h2>
         <ul style="color:var(--ink-2);padding-left:1.15em">
